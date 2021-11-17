@@ -1,0 +1,22 @@
+{
+  "name": "test-pdf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ws": "sass --watch scss/style.scss css/style.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "pdf.js": "^0.1.0",
+    "pdfjs-dist": "^2.10.377",
+    "worker-loader": "^3.0.8"
+  }
+}
