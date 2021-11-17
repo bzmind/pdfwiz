@@ -332,7 +332,7 @@ function goToSearchResultPage(pageNum) {
   // We check if a highlighted span already exists, which means that the user
   // has already seen this page and this page is arleady rendered and it was
   // already showing the highlighted span, so if it has been seen before, we don't
-  // repeat the rendering and highlighting process again.
+  // repeat the rendering and highlighting process again
   let highlightedSpan = document.querySelectorAll(`[data-page="${pageNum}"] .textLayer span.srHighlighted`);
 
   if (highlightedSpan.length > 0) {
