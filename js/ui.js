@@ -143,7 +143,7 @@ function enableReadingPageUI() {
       let dataSearchedPage = document.querySelector('[data-searched="true"]');
       if (dataSearchedPage != undefined) dataSearchedPage.removeAttribute('data-searched');
       searchInput.value = '';
-      pdfModule.emptySrPageAndText();
+      pdfModule.clearPreviousSearchData();
     } else {
       searchMenu.setAttribute('class', 'on');
       searchBtn.setAttribute('class', 'clicked');
@@ -266,7 +266,7 @@ function enableReadingPageUI() {
       let dataSearchedPage = document.querySelector('[data-searched="true"]');
       if (dataSearchedPage != undefined) dataSearchedPage.removeAttribute('data-searched');
       searchInput.value = '';
-      pdfModule.emptySrPageAndText();
+      pdfModule.clearPreviousSearchData();
     }
   }
 

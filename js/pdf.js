@@ -280,22 +280,7 @@ let currentSr;
 
 function searchAllPages(searchText) {
   let promises = [];
-
-  // If user was searching something else before this, and then it searched for sth else
-  // then we need to clear any of the informations from the previous searched text
-  // like currentsr, data-searchindex, and the page data-searched attribute
-  currentSr = null;
-
-  for (let i = 0; i < srSpans.length; i++) {
-    document.querySelector(`[data-searchindex="${i}"]`).removeAttribute('data-searchindex');
-  }
-
-  if (document.querySelector('[data-searched="true"]') != null)
-    document.querySelector('[data-searched="true"]').removeAttribute('data-searched');
-
-  // empty the srSpans from previous searched spans
-  srSpans = [];
-  srPageAndText = [];
+  clearPreviousSearchData();
 
   for (let i = 1; i <= allPages; i++) {
     promises.push(getPageLinesPairs(searchText, i));
@@ -470,9 +455,22 @@ function scrollToSrSpan(e) {
   UiModule.checkSearchButtons();
 }
 
-function emptySrPageAndText() {
+function clearPreviousSearchData() {
+  // If user was searching something else before this, and then it searched for sth else
+  // then we need to clear any of the informations from the previous searched text
+  // like currentsr, data-searchindex, and the page data-searched attribute
+  currentSr = null;
+
+  for (let i = 0; i < srSpans.length; i++) {
+    document.querySelector(`[data-searchindex="${i}"]`).removeAttribute('data-searchindex');
+  }
+
+  if (document.querySelector('[data-searched="true"]') != null)
+    document.querySelector('[data-searched="true"]').removeAttribute('data-searched');
+  // empty the srSpans from previous searched spans
+  srSpans = [];
   srPageAndText = [];
 }
 
-export { allPages, makePageContainers, makeSidebar, searchAllPages, currentSr, srSpans, srPageAndText, emptySrPageAndText, goToSearchResultPage, scrollToSrSpan };
+export { allPages, makePageContainers, makeSidebar, searchAllPages, currentSr, srSpans, srPageAndText, clearPreviousSearchData, goToSearchResultPage, scrollToSrSpan };
 export default showPdf;
