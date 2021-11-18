@@ -278,10 +278,15 @@ function renderPageImage(pageImageNum) {
   });
 }
 
+function regexEscape(str) {
+  return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+}
+
 let currentSr;
 
 function searchAllPages(searchText) {
   clearPreviousSearchData();
+  UiModule.checkSearchButtons();
   let promises = [];
   isSearching = true;
 
@@ -312,7 +317,7 @@ function getPageLinesPairs(searchText, pageNum) {
   }).then(textContent => {
     // Search combined text content using regular expression
     let text = textContent.items.map(function (i) { return i.str; }).join(' ');
-    let re = new RegExp(searchText, "gi");
+    let re = new RegExp(regexEscape(searchText), "gi");
     let m;
     let lines = [];
 
@@ -364,12 +369,12 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
 
   let page = document.querySelector(`[data-page="${pageNum}"]`);
   page.setAttribute('data-searched', 'true');
-
   let firstHighlightedSpan;
-
   let pageSpans = document.querySelectorAll(`[data-page="${pageNum}"] .textLayer span`);
+
   searchWordsArr.forEach((searchWord) => {
-    let re = new RegExp(searchWord, 'g');
+    let re = new RegExp(`${regexEscape(searchWord)}`, 'g');
+    console.log(regexEscape(searchWord));
 
     pageSpans.forEach(span => {
       let spanContent = span.textContent;
@@ -381,7 +386,7 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
         if (span.innerHTML.includes('srHighlighted')) {
           // This regex is only for grabbing the text outside of the span tag, so we can
           // highlight both the big "D" and the small "d" together
-          let re = new RegExp(`(${searchWord})(?![^<]*>|[^<>]*</)`, 'g');
+          let re = new RegExp(`(${regexEscape(searchWord)})(?![^<]*>|[^<>]*</)`, 'g');
           span.innerHTML = span.innerHTML.replace(re, `<span class="srHighlighted">${searchWord}</span>`);
         } else {
           span.innerHTML = span.innerHTML.replace(re, `<span class="srHighlighted">${searchWord}</span>`);
@@ -398,7 +403,7 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
     // that's why I made this case insensitive regex, otherwise the above re,
     // would first push all the spans which have big 'D' for example, and then
     // it would push all the spans which had small 'd'
-    let insensitiveRe = new RegExp(searchWordsArr[0], 'gi');
+    let insensitiveRe = new RegExp(regexEscape(searchWordsArr[0]), 'gi');
     if (insensitiveRe.test(spanContent)) {
       if (span.className != 'srHighlighted' && !srSpans.includes(span)) {
         span.setAttribute('data-searchindex', searchIndex);
@@ -412,6 +417,7 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
     currentSr = firstHighlightedSpan;
     firstHighlightedSpan.scrollIntoView({ block: 'center' });
   }
+  
   UiModule.checkSearchButtons();
 }
 

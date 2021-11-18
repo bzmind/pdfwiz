@@ -160,9 +160,9 @@ function enableReadingPageUI() {
 
   let prevSearchResult = document.querySelector('.prevSearchResult');
   let nextSearchResult = document.querySelector('.nextSearchResult');
-  prevSearchResult.addEventListener('click', goToSrPage);
-  nextSearchResult.addEventListener('click', goToSrPage);
-  function goToSrPage(e) {
+  prevSearchResult.addEventListener('click', goToSrSpan);
+  nextSearchResult.addEventListener('click', goToSrSpan);
+  function goToSrSpan(e) {
     pdfModule.scrollToSrSpan(e);
   }
 
@@ -171,8 +171,12 @@ function enableReadingPageUI() {
     let nextSrBtn = document.querySelector('.nextSearchResult');
     let searchInput = document.querySelector('.searchInput');
     let currSpanIndex;
+
     if (pdfModule.currentSr != null)
       currSpanIndex = parseInt(pdfModule.currentSr.getAttribute('data-searchindex'));
+    else
+      currSpanIndex = 0;
+
     let keys = Object.keys(pdfModule.srPageAndText);
 
     if (searchInput.value == '') {
@@ -186,10 +190,14 @@ function enableReadingPageUI() {
       prevSrBtn.disabled = false;
     }
 
-    if (currSpanIndex == keys.length - 1) {
-      nextSrBtn.disabled = true;
+    if (keys.length > 0) {
+      if (currSpanIndex == keys.length - 1) {
+        nextSrBtn.disabled = true;
+      } else {
+        nextSrBtn.disabled = false;
+      }
     } else {
-      nextSrBtn.disabled = false;
+      nextSrBtn.disabled = true;
     }
   }
 
