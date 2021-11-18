@@ -137,11 +137,8 @@ function enableReadingPageUI() {
   searchBtn.addEventListener('click', toggleSearchMenu);
   function toggleSearchMenu() {
     if (searchBtn.getAttribute('class') == 'clicked') {
-      clearHighlights();
       searchBtn.removeAttribute('class');
       searchMenu.removeAttribute('class');
-      let dataSearchedPage = document.querySelector('[data-searched="true"]');
-      if (dataSearchedPage != undefined) dataSearchedPage.removeAttribute('data-searched');
       searchInput.value = '';
       pdfModule.clearPreviousSearchData();
     } else {
@@ -151,21 +148,6 @@ function enableReadingPageUI() {
       document.querySelector('.nextSearchResult').disabled = true;
       setTimeout(() => { document.querySelector('.searchInput').focus(); }, 50);
     }
-  }
-
-  function clearHighlights() {
-    let highlights = document.querySelectorAll('.srHighlighted');
-    let prevHighlight;
-
-    highlights.forEach((highlight) => {
-      if (prevHighlight != null
-        && prevHighlight.parentElement == highlight.parentElement)
-        return;
-
-      let highlightParentText = highlight.parentElement.textContent;
-      highlight.parentElement.textContent = highlightParentText.replace('<span class="srHighlighted">', '').replace('</span>', '');
-      prevHighlight = highlight;
-    });
   }
 
   // Search Input
@@ -260,11 +242,8 @@ function enableReadingPageUI() {
       && e.target != searchBtn && !searchBtn.contains(e.target)
       && e.target != pageInfo && !pageInfo.contains(e.target)
       && searchMenu.className == 'on') {
-      clearHighlights();
       searchMenu.removeAttribute('class');
       searchBtn.removeAttribute('class');
-      let dataSearchedPage = document.querySelector('[data-searched="true"]');
-      if (dataSearchedPage != undefined) dataSearchedPage.removeAttribute('data-searched');
       searchInput.value = '';
       pdfModule.clearPreviousSearchData();
     }
