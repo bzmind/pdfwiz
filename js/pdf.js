@@ -1,4 +1,3 @@
-"use strict";
 import * as UiModule from './ui.js';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js';
@@ -16,15 +15,23 @@ const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
 
 // Get document
-function showPdf() {
-  pdfjsLib.getDocument(url).promise.then(function (_pdfDoc) {
-    pdfDoc = _pdfDoc;
-    allPages = pdfDoc.numPages;
-    makePageContainers();
-    makeSidebar();
-    setupPageRefs();
-    document.querySelector('#allPages').textContent = allPages;
-  });
+function showPdf(file) {
+  let fileReader = new FileReader();
+
+  fileReader.readAsArrayBuffer(file);
+
+  fileReader.onload = () => {
+    let typedArray = new Uint8Array(this.result);
+    
+    pdfjsLib.getDocument(typedArray).promise.then(function (_pdfDoc) {
+      pdfDoc = _pdfDoc;
+      allPages = pdfDoc.numPages;
+      makePageContainers();
+      makeSidebar();
+      setupPageRefs();
+      document.querySelector('#allPages').textContent = allPages;
+    });
+  }
 }
 
 function setupInternalLink(internalLink) {
@@ -374,7 +381,6 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
 
   searchWordsArr.forEach((searchWord) => {
     let re = new RegExp(`${regexEscape(searchWord)}`, 'g');
-    console.log(regexEscape(searchWord));
 
     pageSpans.forEach(span => {
       let spanContent = span.textContent;
@@ -417,7 +423,7 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
     currentSr = firstHighlightedSpan;
     firstHighlightedSpan.scrollIntoView({ block: 'center' });
   }
-  
+
   UiModule.checkSearchButtons();
 }
 

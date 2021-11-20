@@ -76,7 +76,7 @@
 
   .page-counter {
     margin: 0 6px;
-    font-family: "rota";
+    font-family: "Bitter";
     align-items: center;
     display: flex;
     font-weight: 600;
@@ -88,7 +88,7 @@
       padding-top: 3px;
       border-radius: 4px;
       text-align: center;
-      margin-right: 5px;
+      margin-right: 8px;
       color: $elText;
       background-color: $bg;
 
@@ -173,7 +173,9 @@
 
 #scale-menu {
   color: $elText;
+  font-family: "Bitter";
   position: fixed;
+  font-size: 14px;
   left: 45px;
   top: 4px;
   background-color: $elBg;
@@ -194,6 +196,7 @@
 
   label {
     display: flex;
+    padding-top: 2px;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -442,6 +445,7 @@
 
       span {
         position: absolute;
+        font-family: "Bitter";
         color: $elText;
         font-weight: 600;
         font-size: 12px;

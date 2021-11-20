@@ -1,0 +1,91 @@
+@use "config" as *;
+
+.homeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  
+  .secondContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    width: 300px;
+    height: 185px;
+
+    .logoContainer {
+      top: 0px;
+      position: absolute;
+      width: 100%;
+
+      .logoSvg {
+        &::before {
+          content: '';
+          border: 1px solid red;
+          width: 100px;
+          height: 100px;
+          background-image: linear-gradient(225deg, #27d86c 0%, #26caf8 50%, #c625d0 100%);
+        }
+
+        .logo {
+          fill: $primary;
+        }
+      }
+
+      .logoText {
+        color: $secondary;
+        font-family: "Bitter";
+        font-weight: 600;
+        letter-spacing: 1.29px;
+        margin: 8px 0 0 0;
+        font-size: 14px;
+      }
+    }
+
+    .uploadContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      bottom: 0px;
+      position: absolute;
+
+      .uploadBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #2f3037;
+        color: $secondary;
+        font-size: 22px;
+        font-family: "Sora";
+        font-weight: 600;
+        border-radius: 25px;
+        border-bottom: 4px solid $primary;
+        margin: 5px;
+        padding: 15px 20px;
+        letter-spacing: 1px;
+        transition: all 0.1s ease-out;
+
+        &:hover {
+          cursor: pointer;
+          background-color: lighten(#2f3037, 3%);
+        }
+
+        &.clicked {
+          transform: translateY(3px);
+          border-bottom: 0px solid $primary;
+        }
+
+        svg {
+          margin-right: 10px;
+          margin-bottom: 2px;
+        }
+      }
+
+      .uploadInput {
+        display: none;
+      }
+    }
+  }
+}
