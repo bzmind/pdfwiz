@@ -9,7 +9,6 @@ let pagesRefs = [];
 let srPageAndText = [];
 let srSpans = [];
 let isSearching;
-const url = '../docs/pdf.pdf';
 
 const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
@@ -384,6 +383,7 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
 
     pageSpans.forEach(span => {
       let spanContent = span.textContent;
+      console.log(span.innerHTML);
 
       if (spanContent.includes(searchWord)) {
         if (firstHighlightedSpan == undefined) {
@@ -398,6 +398,7 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
           span.innerHTML = span.innerHTML.replace(re, `<span class="srHighlighted">${searchWord}</span>`);
         }
       }
+      console.log(span.innerHTML);
     });
   });
 

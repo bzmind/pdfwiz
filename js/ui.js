@@ -61,7 +61,7 @@ function enableReadingPageUI() {
       pageCounter.value = Math.floor(num);
       updateSidebarPage(pageCounter.value)
     }
-
+    console.log(num);
     checkButtons();
   }
 
@@ -305,7 +305,6 @@ function enableReadingPageUI() {
     }
   });
 
-  document.querySelector('.loading').style.display = 'none';
   document.querySelector('.temp').replaceWith(...document.querySelector('.temp').childNodes);
 }
 
