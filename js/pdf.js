@@ -9,6 +9,7 @@ let pagesRefs = [];
 let srPageAndText = [];
 let srSpans = [];
 let isSearching;
+let pdfHash;
 
 const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
@@ -17,12 +18,13 @@ const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
 function showPdf(file) {
   let fileReader = new FileReader();
 
-  fileReader.onload = function() {
+  fileReader.onload = function () {
     let typedArray = new Uint8Array(this.result);
 
     pdfjsLib.getDocument(typedArray).promise.then(function (_pdfDoc) {
       pdfDoc = _pdfDoc;
       allPages = pdfDoc.numPages;
+      pdfHash = pdfDoc.fingerprints[0];
       makePageContainers();
       makeSidebar();
       setupPageRefs();
@@ -86,7 +88,18 @@ function makePageContainers() {
 
   return promise.then(() => {
     enableObserver();
+    checkPdf(pdfDoc.fingerprints[0]);
   });
+}
+
+function checkPdf(pdfHash) {
+  if (localStorage.getItem(pdfHash) != null) {
+    let lastPos = parseInt(localStorage.getItem(pdfHash));
+    document.querySelector('.pdf-container').scrollTop = lastPos;
+  } else {
+    let currPos = document.querySelector('.pdf-container').scrollTop;
+    localStorage.setItem(pdfHash, currPos);
+  }
 }
 
 // Render page
@@ -514,6 +527,6 @@ function clearPreviousSearchData() {
 
 export {
   allPages, makePageContainers, makeSidebar, searchAllPages, currentSr, srSpans,
-  srPageAndText, clearPreviousSearchData, goToSearchResultPage, scrollToSrSpan
+  srPageAndText, clearPreviousSearchData, goToSearchResultPage, scrollToSrSpan, pdfHash
 };
 export default showPdf;

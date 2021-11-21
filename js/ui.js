@@ -54,13 +54,12 @@ function enableReadingPageUI() {
     let num = (pdfContainer.scrollTop / height * pdfModule.allPages + 1).toFixed(2);
     let numDecimal = num - Math.floor(num);
 
-    if (numDecimal >= changePageThreshold()) {
-      pageCounter.value = Math.round(num);
-      updateSidebarPage(pageCounter.value)
-    } else {
-      pageCounter.value = Math.floor(num);
-      updateSidebarPage(pageCounter.value)
-    }
+    if (numDecimal >= changePageThreshold()) pageCounter.value = Math.round(num);
+    else pageCounter.value = Math.floor(num);
+
+    updateSidebarPage(pageCounter.value);
+    localStorage.setItem(pdfModule.pdfHash, pdfContainer.scrollTop);
+
     checkButtons();
   }
 
