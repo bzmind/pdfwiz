@@ -1,5 +1,6 @@
 const express = require('express');
-// import showPdf from '../js/pdf.js';
+
+import showPdf from '../js/pdf.js';
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -7,8 +8,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  // showPdf(req.body);
   res.redirect('/reader');
+  showPdf(req.body);
 });
 
-module.exports = router;
+export default router;

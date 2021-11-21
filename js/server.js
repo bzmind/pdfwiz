@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+
 const app = express();
-const readerRouter = require('../routes/reader');
+import router from '../routes/reader.js';
 const port = 5500;
 const ip = '127.0.0.1';
 app.set('view engine', 'ejs');

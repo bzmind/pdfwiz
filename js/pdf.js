@@ -1,4 +1,6 @@
 import * as UiModule from './ui.js';
+import pdfjsLib from "pdfjs-dist"
+import pdfjsViewer from "pdfjs-dist/web/pdf_viewer.js"
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js';
 
