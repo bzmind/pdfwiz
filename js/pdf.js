@@ -1,6 +1,4 @@
 import * as UiModule from './ui.js';
-import pdfjsLib from "pdfjs-dist"
-import pdfjsViewer from "pdfjs-dist/web/pdf_viewer.js"
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js';
 
@@ -20,11 +18,9 @@ const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
 function showPdf(file) {
   let fileReader = new FileReader();
 
-  fileReader.readAsArrayBuffer(file);
-
-  fileReader.onload = () => {
+  fileReader.onload = function() {
     let typedArray = new Uint8Array(this.result);
-    
+
     pdfjsLib.getDocument(typedArray).promise.then(function (_pdfDoc) {
       pdfDoc = _pdfDoc;
       allPages = pdfDoc.numPages;
@@ -34,6 +30,8 @@ function showPdf(file) {
       document.querySelector('#allPages').textContent = allPages;
     });
   }
+
+  fileReader.readAsArrayBuffer(file);
 }
 
 function setupInternalLink(internalLink) {

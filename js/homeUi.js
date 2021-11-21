@@ -1,5 +1,9 @@
+import showPdf from './pdf.js';
+import enableReadingPageUI from './ui.js';
+
 let mouseDown = 0;
 let firstClickedElement;
+
 document.body.onmousedown = function (e) {
   ++mouseDown;
   firstClickedElement = e.target;
@@ -31,30 +35,8 @@ uploadBtn.addEventListener('click', () => {
 });
 
 uploadInput.onchange = (e) => {
-  let file = e.target.files[0];
-  let fd = new FormData();
-  fd.append(uploadInput, file);
-
-  $.ajax({
-    url: '/reader',
-    method: 'POST',
-    data: fd,
-    cache: false,
-    processData: false,
-    contentType: 'application/pdf',
-    beforeSend: function () {
-      console.log("Uploading, please wait....");
-    },
-    success: function () {
-      console.log("Upload success.");
-    },
-    error: function () {
-      console.log("ERROR in upload");
-    },
-    complete: function () {
-      console.log("upload complete.");
-    }
-  }).done(() => {
-    window.location.href = '/reader';
-  });
+  document.querySelector('.loading').removeAttribute('style');
+  document.querySelector('.homeContainer').remove();
+  showPdf(e.target.files[0]);
+  enableReadingPageUI();
 }

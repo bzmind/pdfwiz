@@ -3,7 +3,6 @@ import * as pdfModule from './pdf.js';
 let checkSearchButtons;
 
 function enableReadingPageUI() {
-
   let prevPageNum;
 
   function changePageThreshold() {
@@ -25,14 +24,15 @@ function enableReadingPageUI() {
     }
   }
 
+  let sidebar = document.querySelector('.sidebar');
   let pageInfo = document.querySelector('.pageInfo');
-  let pageCounter = document.querySelector('#currPage');
-  pageCounter.value = 1;
   let prevButton = document.querySelector('#prev-page');
   let nextButton = document.querySelector('#next-page');
+  let pageCounter = document.querySelector('#currPage');
   let pdfContainer = document.querySelector('.pdf-container');
-  let sidebar = document.querySelector('.sidebar');
   let sidebarParent = document.querySelector('.sidebarParent');
+
+  pageCounter.value = 1;
 
   if (sidebar.classList.contains('sidebar-on'))
     sidebarParent.style.display = 'flex';
@@ -49,7 +49,6 @@ function enableReadingPageUI() {
   checkButtons();
 
   function updatePageNum() {
-    'use strict';
     prevPageNum = pageCounter.value;
     let height = pdfContainer.scrollHeight;
     let num = (pdfContainer.scrollTop / height * pdfModule.allPages + 1).toFixed(2);
@@ -305,6 +304,9 @@ function enableReadingPageUI() {
       goToPage(e.target.value);
     }
   });
+
+  document.querySelector('.loading').style.display = 'none';
+  document.querySelector('.temp').replaceWith(...document.querySelector('.temp').childNodes);
 }
 
 export { checkSearchButtons };
