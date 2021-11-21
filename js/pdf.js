@@ -1,6 +1,6 @@
 import * as UiModule from './ui.js';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 
 let allPages = 0;
 let sidebarScale = 0.25;

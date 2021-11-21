@@ -61,7 +61,6 @@ function enableReadingPageUI() {
       pageCounter.value = Math.floor(num);
       updateSidebarPage(pageCounter.value)
     }
-    console.log(num);
     checkButtons();
   }
 
