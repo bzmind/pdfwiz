@@ -36,7 +36,6 @@ uploadBtn.addEventListener('click', () => {
 
 uploadInput.onchange = (e) => {
   document.querySelector('.homeContainer').remove();
-  let file = e.target.files[0];
-  showPdf(file);
+  showPdf(e.target.files[0]);
   enableReadingPageUI();
 }
