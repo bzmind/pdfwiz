@@ -25,11 +25,11 @@ function showPdf(file) {
       pdfDoc = _pdfDoc;
       allPages = pdfDoc.numPages;
       pdfHash = pdfDoc.fingerprints[0];
-      getZoomAndThemeFromLs(pdfHash);
       makePageContainers();
       makeSidebar();
       setupPageRefs();
       document.querySelector('#allPages').textContent = allPages;
+      getZoomAndThemeFromLs(pdfHash);
     });
   }
 
