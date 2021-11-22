@@ -25,6 +25,7 @@ function showPdf(file) {
       pdfDoc = _pdfDoc;
       allPages = pdfDoc.numPages;
       pdfHash = pdfDoc.fingerprints[0];
+      getZoomAndThemeFromLs(pdfHash);
       makePageContainers();
       makeSidebar();
       setupPageRefs();
@@ -92,13 +93,33 @@ function makePageContainers() {
   });
 }
 
+function getZoomAndThemeFromLs(pdfHash) {
+  if (localStorage.getItem(pdfHash) != null) {
+    let zoom = parseFloat(JSON.parse(localStorage.getItem(pdfHash)).zoom);
+    document.querySelector('input[name="scaleRadio"]:checked').checked = false;
+    document.querySelectorAll('input[name="scaleRadio"]').forEach(inp => {
+      if (inp.value == zoom) {
+        inp.checked = "true";
+      }
+    });
+
+    document.querySelector('.activeTheme').setAttribute('class', 'disabledTheme');
+    let theme = JSON.parse(localStorage.getItem(pdfHash)).theme;
+    document.getElementById(theme).setAttribute('class', 'activeTheme');
+  } else {
+    document.querySelector('input[name="scaleRadio"]:checked').checked = false;
+    document.querySelectorAll('input[name="scaleRadio"]').forEach(inp => {
+      if (inp.value == 1.2) {
+        inp.checked = "true";
+      }
+    });
+  }
+}
+
 function checkPdf(pdfHash) {
   if (localStorage.getItem(pdfHash) != null) {
-    let lastPos = parseInt(localStorage.getItem(pdfHash));
+    let lastPos = parseInt(JSON.parse(localStorage.getItem(pdfHash)).position);
     document.querySelector('.pdf-container').scrollTop = lastPos;
-  } else {
-    let currPos = document.querySelector('.pdf-container').scrollTop;
-    localStorage.setItem(pdfHash, currPos);
   }
 }
 
@@ -109,6 +130,7 @@ function renderPage(pageNum) {
 
   return pdfDoc.getPage(pageNum).then(page => {
     let scale = parseFloat(document.querySelector('input[name="scaleRadio"]:checked').value);
+
     let canvas = document.createElement('canvas');
     canvas.style.display = "block";
     canvas.id = "pdfLayer";

@@ -45,6 +45,12 @@ function enableReadingPageUI() {
   // Button events
   prevButton.addEventListener('click', showPrevPage);
   nextButton.addEventListener('click', showNextPage);
+  
+  const pdfInfo = {
+    position: '',
+    zoom: '',
+    theme: ''
+  }
 
   checkButtons();
 
@@ -58,7 +64,13 @@ function enableReadingPageUI() {
     else pageCounter.value = Math.floor(num);
 
     updateSidebarPage(pageCounter.value);
-    localStorage.setItem(pdfModule.pdfHash, pdfContainer.scrollTop);
+
+    pdfInfo.position = pdfContainer.scrollTop;
+    pdfInfo.zoom = document.querySelector('input[name="scaleRadio"]:checked').value;;
+    pdfInfo.theme = document.querySelector('.activeTheme').id;;
+
+    let strfied = JSON.stringify(pdfInfo);
+    localStorage.setItem(pdfModule.pdfHash, strfied);
 
     checkButtons();
   }
@@ -125,6 +137,10 @@ function enableReadingPageUI() {
       let target = document.querySelector(`[data-page="${lastPageNum}"]`);
       target.scrollIntoView({ block: 'center' });
       updatePageNum();
+      
+      pdfInfo.zoom = document.querySelector('input:checked').value;
+      let strfied = JSON.stringify(pdfInfo);
+      localStorage.setItem(pdfModule.pdfHash, strfied);
     });
   }
 
@@ -232,6 +248,10 @@ function enableReadingPageUI() {
       else
         item.style.backgroundColor = 'black';
     });
+
+    pdfInfo.theme = document.querySelector('.activeTheme').id;
+    let strfied = JSON.stringify(pdfInfo);
+    localStorage.setItem(pdfModule.pdfHash, strfied);
   }
 
   // Document click
