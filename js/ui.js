@@ -1,29 +1,11 @@
 import * as pdfModule from './pdf.js';
 
 let checkSearchButtons;
+let checkButtons;
+let updateSidebarPage;
 
 function enableReadingPageUI() {
   let prevPageNum;
-
-  function changePageThreshold() {
-    let scale = parseFloat(document.querySelector('input[name="scaleRadio"]:checked').value);
-
-    switch (scale) {
-      case 1.2: // 100%
-        return 0.70;
-      case 1.4: // 120%
-        return 0.75;
-      case 1.6: // 140%
-        return 0.80;
-      case 1.8: // 160%
-        return 0.80;
-      case 2:   // 180%
-        return 0.80;
-      case 2.2: // 200%
-        return 0.85;
-    }
-  }
-
   let sidebar = document.querySelector('.sidebar');
   let pageInfo = document.querySelector('.pageInfo');
   let prevButton = document.querySelector('#prev-page');
@@ -39,48 +21,20 @@ function enableReadingPageUI() {
   else
     sidebarParent.style.display = 'none';
 
-  pdfContainer.addEventListener('scroll', updatePageNum);
-  window.addEventListener('resize', updatePageNum);
+  pdfContainer.addEventListener('scroll', updateLocalStorage);
+  window.addEventListener('resize', updateLocalStorage);
 
   // Button events
   prevButton.addEventListener('click', showPrevPage);
   nextButton.addEventListener('click', showNextPage);
-  
+
   const pdfInfo = {
     position: '',
     zoom: '',
     theme: ''
   }
 
-  checkButtons();
-
-  function updatePageNum() {
-    prevPageNum = pageCounter.value;
-    let height = pdfContainer.scrollHeight;
-    let num = (pdfContainer.scrollTop / height * pdfModule.allPages + 1).toFixed(2);
-    let numDecimal = num - Math.floor(num);
-
-    if (numDecimal >= changePageThreshold()) pageCounter.value = Math.round(num);
-    else pageCounter.value = Math.floor(num);
-
-    updateSidebarPage(pageCounter.value);
-
-    pdfInfo.position = pdfContainer.scrollTop;
-    pdfInfo.zoom = document.querySelector('input[name="scaleRadio"]:checked').value;;
-    pdfInfo.theme = document.querySelector('.activeTheme').id;;
-
-    let strfied = JSON.stringify(pdfInfo);
-    localStorage.setItem(pdfModule.pdfHash, strfied);
-
-    checkButtons();
-  }
-
-  function updateSidebarPage(pageNum) {
-    let sidebarTarget = document.querySelector(`[data-page-image="${pageNum}"]`);
-    sidebarTarget.scrollIntoView({ block: 'start' });
-  }
-
-  function checkButtons() {
+  checkButtons = function () {
     if (pageCounter.value == 1) {
       prevButton.disabled = true;
     } else {
@@ -92,6 +46,22 @@ function enableReadingPageUI() {
     } else {
       nextButton.disabled = false;
     }
+  }
+
+  updateSidebarPage = function (pageNum) {
+    let sidebarTarget = document.querySelector(`[data-page-image="${pageNum}"]`);
+    sidebarTarget.scrollIntoView({ block: 'start' });
+  }
+
+  checkButtons();
+
+  function updateLocalStorage() {
+    pdfInfo.position = pdfContainer.scrollTop;
+    pdfInfo.zoom = document.querySelector('input[name="scaleRadio"]:checked').value;;
+    pdfInfo.theme = document.querySelector('.activeTheme').id;;
+
+    let strfied = JSON.stringify(pdfInfo);
+    localStorage.setItem(pdfModule.pdfHash, strfied);
   }
 
   function showPrevPage() {
@@ -136,8 +106,7 @@ function enableReadingPageUI() {
     pdfModule.makePageContainers().then(() => {
       let target = document.querySelector(`[data-page="${lastPageNum}"]`);
       target.scrollIntoView({ block: 'center' });
-      updatePageNum();
-      
+
       pdfInfo.zoom = document.querySelector('input:checked').value;
       let strfied = JSON.stringify(pdfInfo);
       localStorage.setItem(pdfModule.pdfHash, strfied);
@@ -326,5 +295,5 @@ function enableReadingPageUI() {
   document.querySelector('.temp').replaceWith(...document.querySelector('.temp').childNodes);
 }
 
-export { checkSearchButtons };
+export { checkSearchButtons, checkButtons, updateSidebarPage };
 export default enableReadingPageUI;

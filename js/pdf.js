@@ -10,6 +10,11 @@ let srPageAndText = [];
 let srSpans = [];
 let isSearching;
 let pdfHash;
+const pdfInfo = {
+  position: '',
+  zoom: '',
+  theme: ''
+}
 
 const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
@@ -89,6 +94,7 @@ function makePageContainers() {
 
   return promise.then(() => {
     enableObserver();
+    observePageChange();
     checkPdf(pdfDoc.fingerprints[0]);
   });
 }
@@ -194,6 +200,52 @@ function renderPage(pageNum) {
       });
     });
   });
+}
+
+function observePageChange() {
+  function isVisible(entry) {
+    entry.forEach((pageContainer) => {
+      if (pageContainer.isIntersecting) {
+        let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
+        updatePageNum(currPage);
+      }
+    });
+  }
+
+  let pageCounter = document.querySelector('#currPage');
+  let pdfContainer = document.querySelector('.pdf-container');
+  let pageContainers = document.querySelectorAll('.page-container');
+  let root = document.querySelector('body');
+  let rootMargin = root.offsetHeight / 2 - 2;
+
+  let observer = new IntersectionObserver(isVisible, { root, rootMargin: `-${rootMargin}px 0px -${rootMargin}px 0px`, threshold: 0 });
+  pageContainers.forEach((container) => {
+    observer.observe(container);
+  });
+
+  new ResizeObserver(() => {
+    rootMargin = root.offsetHeight / 2 - 2;
+    observer.disconnect();
+    observer = new IntersectionObserver(isVisible, { root, rootMargin: `-${rootMargin}px 0px -${rootMargin}px 0px`, threshold: 0 });
+    pageContainers.forEach((container) => {
+      observer.observe(container);
+    });
+  }).observe(root);
+
+  function updatePageNum(currPage) {
+    pageCounter.value = currPage;
+
+    UiModule.updateSidebarPage(currPage);
+
+    pdfInfo.position = pdfContainer.scrollTop;
+    pdfInfo.zoom = document.querySelector('input[name="scaleRadio"]:checked').value;;
+    pdfInfo.theme = document.querySelector('.activeTheme').id;;
+
+    let strfied = JSON.stringify(pdfInfo);
+    localStorage.setItem(pdfHash, strfied);
+
+    UiModule.checkButtons();
+  }
 }
 
 // Enable Intersection Observer to lazy load pages
