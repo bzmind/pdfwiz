@@ -207,7 +207,6 @@ function observePageChange() {
     entry.forEach((pageContainer) => {
       if (pageContainer.isIntersecting) {
         let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
-        console.log(pageContainer);
         updatePageNum(currPage);
       }
     });
