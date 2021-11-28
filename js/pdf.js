@@ -207,26 +207,27 @@ function observePageChange() {
     entry.forEach((pageContainer) => {
       if (pageContainer.isIntersecting) {
         let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
+        console.log(pageContainer);
         updatePageNum(currPage);
       }
     });
   }
 
   let pageCounter = document.querySelector('#currPage');
-  let pdfContainer = document.querySelector('.pdf-container');
   let pageContainers = document.querySelectorAll('.page-container');
+  let sidebar = document.querySelector('.sidebar');
   let root = document.querySelector('body');
-  let rootMargin = root.offsetHeight / 2 - 2;
+  let rootMargin = `-${root.offsetHeight / 2 - 1}px 0px -${root.offsetHeight / 2 - 1}px 0px`;
 
-  let observer = new IntersectionObserver(isVisible, { root, rootMargin: `-${rootMargin}px 0px -${rootMargin}px 0px`, threshold: 0 });
+  let observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
   pageContainers.forEach((container) => {
     observer.observe(container);
   });
 
   new ResizeObserver(() => {
-    rootMargin = root.offsetHeight / 2 - 2;
+    rootMargin = `-${root.offsetHeight / 2 - 1}px 0px -${root.offsetHeight / 2 - 1}px 0px`;
     observer.disconnect();
-    observer = new IntersectionObserver(isVisible, { root, rootMargin: `-${rootMargin}px 0px -${rootMargin}px 0px`, threshold: 0 });
+    observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
     pageContainers.forEach((container) => {
       observer.observe(container);
     });
@@ -235,14 +236,8 @@ function observePageChange() {
   function updatePageNum(currPage) {
     pageCounter.value = currPage;
 
-    UiModule.updateSidebarPage(currPage);
-
-    pdfInfo.position = pdfContainer.scrollTop;
-    pdfInfo.zoom = document.querySelector('input[name="scaleRadio"]:checked').value;;
-    pdfInfo.theme = document.querySelector('.activeTheme').id;;
-
-    let strfied = JSON.stringify(pdfInfo);
-    localStorage.setItem(pdfHash, strfied);
+    if (sidebar.classList.contains('sidebar-on'))
+      UiModule.updateSidebarPage(currPage);
 
     UiModule.checkButtons();
   }
