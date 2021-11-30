@@ -572,7 +572,7 @@ function clearPreviousSearchData() {
   // but if there's two or more, we don't need them, we only need one .srHighlighted within a parent span, so then we will remove
   // any .srHighlighted from it, so when that second .srHighlighted is removed, it's no longer there, but it is still in our
   // highlights variable, so it'll return null and throws error, but I check if the second .srHighlighted has the same as the prevHighlight
-  // it means that it's the second child of it's parent, we don't need it, so we return out in line 497
+  // it means that it's the second child of it's parent, we don't need it, so we return out of the forEach loop below
   let highlights = document.querySelectorAll('.srHighlighted');
   let prevHighlight;
 
