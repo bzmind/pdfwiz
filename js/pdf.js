@@ -10,11 +10,6 @@ let srPageAndText = [];
 let srSpans = [];
 let isSearching;
 let pdfHash;
-const pdfInfo = {
-  position: '',
-  zoom: '',
-  theme: ''
-}
 
 const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
@@ -323,7 +318,6 @@ function enableSidebarObserver() {
 }
 
 function renderPageImage(pageImageNum) {
-
   pdfDoc.getPage(pageImageNum).then(page => {
 
     let canvas = document.createElement('canvas');
@@ -398,7 +392,6 @@ function searchAllPages(searchText) {
 }
 
 function getPageLinesPairs(searchText, pageNum) {
-
   return pdfDoc.getPage(pageNum).then(page => {
     return page.getTextContent();
   }).then(textContent => {
@@ -479,7 +472,6 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
           span.innerHTML = span.innerHTML.replace(re, `<span class="srHighlighted">${searchWord}</span>`);
         }
       }
-      console.log(span.innerHTML);
     });
   });
 
