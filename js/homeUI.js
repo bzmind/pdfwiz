@@ -38,23 +38,31 @@ uploadInput.onchange = (e) => {
   processPdf(e);
 }
 
-
+document.addEventListener('drop', (e) => {
+  e.preventDefault();
+  processPdf(e);
+});
 
 function processPdf(e) {
-  let file = e.target.files[0];
+  let file;
 
+  if (e.type == 'change')
+    file = e.target.files[0];
+  else if (e.type == 'drop')
+    file = e.dataTransfer.items[0].getAsFile();
+    
   if (file.type !== 'application/pdf') {
     let secondContainer = document.querySelector('.secondContainer');
-    
+
     let errorDiv = document.createElement('div');
     errorDiv.className = 'error';
-    
+
     let errorText = document.createElement('p');
     errorText.innerHTML = '<span>🤔</span>the selected file was not a PDF';
-    
+
     errorDiv.appendChild(errorText);
     secondContainer.after(errorDiv);
-    
+
     return;
   }
 
