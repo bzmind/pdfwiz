@@ -50,7 +50,7 @@ function processPdf(e) {
     errorDiv.className = 'error';
     
     let errorText = document.createElement('p');
-    errorText.innerHTML = '<span>🤔</span>the selected file was not in PDF format';
+    errorText.innerHTML = '<span>🤔</span>the selected file was not a PDF';
     
     errorDiv.appendChild(errorText);
     secondContainer.after(errorDiv);
