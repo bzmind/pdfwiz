@@ -35,8 +35,30 @@ uploadBtn.addEventListener('click', () => {
 });
 
 uploadInput.onchange = (e) => {
-  document.querySelector('.homeContainer').remove();
+  processPdf(e);
+}
+
+
+
+function processPdf(e) {
   let file = e.target.files[0];
+
+  if (file.type !== 'application/pdf') {
+    let secondContainer = document.querySelector('.secondContainer');
+    
+    let errorDiv = document.createElement('div');
+    errorDiv.className = 'error';
+    
+    let errorText = document.createElement('p');
+    errorText.innerHTML = '<span>🤔</span>the selected file was not in PDF format';
+    
+    errorDiv.appendChild(errorText);
+    secondContainer.after(errorDiv);
+    
+    return;
+  }
+
+  document.querySelector('.homeContainer').remove();
   showPdf(file);
   enableReadingPageUI();
 }

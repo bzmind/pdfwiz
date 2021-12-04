@@ -418,6 +418,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   height: 100%;
 }
 .homeContainer .secondContainer {
@@ -489,6 +490,29 @@
 }
 .homeContainer .secondContainer .uploadContainer .uploadInput {
   display: none;
+}
+
+.error {
+  position: relative;
+  margin-top: 30px;
+  padding: 15px;
+  padding-bottom: 14px;
+  background-color: #d6363e;
+  border-radius: 20px;
+}
+.error p {
+  display: flex;
+  align-items: center;
+  font-family: "Bitter";
+  font-weight: bold;
+  margin-bottom: 0px;
+  color: #ffa0a0;
+  font-size: 17px;
+}
+.error p span {
+  font-weight: 100;
+  font-size: 25px;
+  margin-right: 3px;
 }
 
 .loading {
