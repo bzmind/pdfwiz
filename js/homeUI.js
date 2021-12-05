@@ -43,6 +43,10 @@ document.addEventListener('drop', (e) => {
   processPdf(e);
 });
 
+document.addEventListener('dragover', (e) => {
+  e.preventDefault();
+});
+
 function processPdf(e) {
   let file;
 
