@@ -201,6 +201,7 @@ function observePageChange() {
   function isVisible(entry) {
     entry.forEach((pageContainer) => {
       if (pageContainer.isIntersecting) {
+        console.log(pageContainer);
         let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
         updatePageNum(currPage);
       }
@@ -211,7 +212,7 @@ function observePageChange() {
   let pageContainers = document.querySelectorAll('.page-container');
   let sidebar = document.querySelector('.sidebar');
   let root = document.querySelector('body');
-  let rootMargin = `-${root.offsetHeight / 2 - 1}px 0px -${root.offsetHeight / 2 - 1}px 0px`;
+  let rootMargin = `-${Math.round(root.offsetHeight / 2) - 5}px 0px -${Math.round(root.offsetHeight / 2) - 5}px 0px`;
 
   let observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
   pageContainers.forEach((container) => {
@@ -219,7 +220,7 @@ function observePageChange() {
   });
 
   new ResizeObserver(() => {
-    rootMargin = `-${root.offsetHeight / 2 - 1}px 0px -${root.offsetHeight / 2 - 1}px 0px`;
+    rootMargin = `-${Math.round(root.offsetHeight / 2) - 5}px 0px -${Math.round(root.offsetHeight / 2) - 5}px 0px`;
     observer.disconnect();
     observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
     pageContainers.forEach((container) => {
