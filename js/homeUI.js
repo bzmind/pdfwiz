@@ -1,6 +1,8 @@
 import showPdf from './pdf.js';
 import enableReadingPageUI from './ui.js';
 
+getLastPdf();
+
 let mouseDown = 0;
 let firstClickedElement;
 
@@ -54,7 +56,7 @@ function processPdf(e) {
     file = e.target.files[0];
   else if (e.type == 'drop')
     file = e.dataTransfer.items[0].getAsFile();
-    
+
   if (file.type !== 'application/pdf') {
     let secondContainer = document.querySelector('.secondContainer');
 
@@ -73,4 +75,18 @@ function processPdf(e) {
   document.querySelector('.homeContainer').remove();
   showPdf(file);
   enableReadingPageUI();
+  setLastPdf(file);
+}
+
+function setLastPdf(file) {
+  localforage.setItem('lastPdf', file);
+}
+
+function getLastPdf() {
+  localforage.getItem('lastPdf', (err, value) => {
+    if (err || !value) return;
+    document.querySelector('.homeContainer').remove();
+    enableReadingPageUI();
+    showPdf(value);
+  });
 }

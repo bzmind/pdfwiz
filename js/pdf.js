@@ -201,7 +201,6 @@ function observePageChange() {
   function isVisible(entry) {
     entry.forEach((pageContainer) => {
       if (pageContainer.isIntersecting) {
-        console.log(pageContainer);
         let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
         updatePageNum(currPage);
       }
