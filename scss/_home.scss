@@ -93,10 +93,9 @@
 
 .error {
   position: relative;
-  margin-top: 30px;
+  margin-top: 15px;
   padding: 15px;
   padding-bottom: 14px;
-  background-color: rgb(214, 54, 62);
   border-radius: 20px;
 
   p {
@@ -104,9 +103,11 @@
     align-items: center;
     font-family: "Bitter";
     font-weight: bold;
+    letter-spacing: 0.5px;
     margin-bottom: 0px;
-    color: rgb(255, 170, 170);
-    font-size: 17px;
+    // color: rgb(255, 170, 170);
+    color: rgb(255, 94, 102);
+    font-size: 16px;
 
     span {
       font-weight: 100;

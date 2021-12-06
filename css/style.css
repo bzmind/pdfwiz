@@ -494,10 +494,9 @@
 
 .error {
   position: relative;
-  margin-top: 30px;
+  margin-top: 15px;
   padding: 15px;
   padding-bottom: 14px;
-  background-color: #d6363e;
   border-radius: 20px;
 }
 .error p {
@@ -505,9 +504,10 @@
   align-items: center;
   font-family: "Bitter";
   font-weight: bold;
+  letter-spacing: 0.5px;
   margin-bottom: 0px;
-  color: #ffaaaa;
-  font-size: 17px;
+  color: #ff5e66;
+  font-size: 16px;
 }
 .error p span {
   font-weight: 100;
