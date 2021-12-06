@@ -94,8 +94,7 @@
 .error {
   position: relative;
   margin-top: 15px;
-  padding: 15px;
-  padding-bottom: 14px;
+  padding: 15px 15px 14px 12px;
   border-radius: 20px;
 
   p {
@@ -105,7 +104,6 @@
     font-weight: bold;
     letter-spacing: 0.5px;
     margin-bottom: 0px;
-    // color: rgb(255, 170, 170);
     color: rgb(255, 94, 102);
     font-size: 16px;
 
