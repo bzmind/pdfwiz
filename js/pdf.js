@@ -25,7 +25,7 @@ function showPdf(file) {
       pdfDoc = _pdfDoc;
       allPages = pdfDoc.numPages;
       pdfHash = pdfDoc.fingerprints[0];
-      getZoomAndThemeFromLs(pdfHash);
+      getPdfLastData(pdfHash);
       makePageContainers();
       makeSidebar();
       setupPageRefs();
@@ -90,12 +90,17 @@ function makePageContainers() {
   return promise.then(() => {
     enableObserver();
     observePageChange();
-    checkPdf(pdfDoc.fingerprints[0]);
+    getPdfLastData(pdfDoc.fingerprints[0]);
   });
 }
 
-function getZoomAndThemeFromLs(pdfHash) {
+function getPdfLastData(pdfHash) {
   if (localStorage.getItem(pdfHash) != null) {
+    // Get pdf's last position
+    let lastPos = parseInt(JSON.parse(localStorage.getItem(pdfHash)).position);
+    document.querySelector('.pdf-container').scrollTop = lastPos;
+
+    // Get pdf's last scale
     let zoom = parseFloat(JSON.parse(localStorage.getItem(pdfHash)).zoom);
     document.querySelector('input[name="scaleRadio"]:checked').checked = false;
     document.querySelectorAll('input[name="scaleRadio"]').forEach(inp => {
@@ -104,6 +109,7 @@ function getZoomAndThemeFromLs(pdfHash) {
       }
     });
 
+    // Get pdf's last theme
     document.querySelector('.activeTheme').setAttribute('class', 'disabledTheme');
     let theme = JSON.parse(localStorage.getItem(pdfHash)).theme;
     document.getElementById(theme).setAttribute('class', 'activeTheme');
@@ -114,13 +120,6 @@ function getZoomAndThemeFromLs(pdfHash) {
         inp.checked = "true";
       }
     });
-  }
-}
-
-function checkPdf(pdfHash) {
-  if (localStorage.getItem(pdfHash) != null) {
-    let lastPos = parseInt(JSON.parse(localStorage.getItem(pdfHash)).position);
-    document.querySelector('.pdf-container').scrollTop = lastPos;
   }
 }
 
@@ -211,7 +210,9 @@ function observePageChange() {
   let pageContainers = document.querySelectorAll('.page-container');
   let sidebar = document.querySelector('.sidebar');
   let root = document.querySelector('body');
-  let rootMargin = `-${Math.round(root.offsetHeight / 2) - 5}px 0px -${Math.round(root.offsetHeight / 2) - 5}px 0px`;
+  let halfRootHeight = 6; // So the complete height of the root will be 12px
+  let rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
+  let rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
 
   let observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
   pageContainers.forEach((container) => {
@@ -219,7 +220,8 @@ function observePageChange() {
   });
 
   new ResizeObserver(() => {
-    rootMargin = `-${Math.round(root.offsetHeight / 2) - 5}px 0px -${Math.round(root.offsetHeight / 2) - 5}px 0px`;
+    rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
+    rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
     observer.disconnect();
     observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
     pageContainers.forEach((container) => {
