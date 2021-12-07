@@ -1,6 +1,12 @@
 import showPdf from './pdf.js';
 import enableReadingPageUI from './ui.js';
 
+let perfEntries = performance.getEntriesByType("navigation")[0];
+
+if (perfEntries.type == 'reload') {
+  localforage.removeItem('lastPdf');
+}
+
 getLastPdf();
 
 let mouseDown = 0;
