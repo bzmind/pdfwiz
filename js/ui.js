@@ -289,7 +289,8 @@ function enableReadingPageUI() {
     }
   });
 
-  document.querySelector('.temp').replaceWith(...document.querySelector('.temp').childNodes);
+  if (document.querySelector('.temp') != null)
+    document.querySelector('.temp').replaceWith(...document.querySelector('.temp').childNodes);
 }
 
 export { checkSearchButtons, checkButtons, updateSidebarPage };

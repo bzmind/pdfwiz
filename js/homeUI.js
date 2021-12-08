@@ -78,7 +78,8 @@ function processPdf(e) {
     return;
   }
 
-  document.querySelector('.homeContainer').remove();
+  if (document.querySelector('.homeContainer') != null)
+    document.querySelector('.homeContainer').remove();
   showPdf(file);
   enableReadingPageUI();
   setLastPdf(file);
