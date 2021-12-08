@@ -104,11 +104,11 @@ function enableReadingPageUI() {
   });
   function zoom() {
     let lastPageNum = document.querySelector('#currPage').value;
+    updateLocalStorage();
+    
     pdfModule.makePageContainers().then(() => {
       let target = document.querySelector(`[data-page="${lastPageNum}"]`);
       target.scrollIntoView({ block: 'center' });
-
-      updateLocalStorage();
     });
   }
 

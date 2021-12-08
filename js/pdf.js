@@ -95,17 +95,18 @@ function makePageContainers() {
 }
 
 function getPdfLastData(pdfHash) {
-  if (localStorage.getItem(pdfHash) != null) {
+  let d = localStorage.getItem(pdfHash);
+  if (d != null) {
     // Get pdf's last position
     let lastPos = parseInt(JSON.parse(localStorage.getItem(pdfHash)).position);
     document.querySelector('.pdf-container').scrollTop = lastPos;
 
     // Get pdf's last scale
     let zoom = parseFloat(JSON.parse(localStorage.getItem(pdfHash)).zoom);
-    document.querySelector('input[name="scaleRadio"]:checked').checked = false;
+    document.querySelector('input[name="scaleRadio"]:checked').removeAttribute('checked');
     document.querySelectorAll('input[name="scaleRadio"]').forEach(inp => {
       if (inp.value == zoom) {
-        inp.checked = "true";
+        inp.checked = "checked";
       }
     });
 
@@ -114,10 +115,10 @@ function getPdfLastData(pdfHash) {
     let theme = JSON.parse(localStorage.getItem(pdfHash)).theme;
     document.getElementById(theme).setAttribute('class', 'activeTheme');
   } else {
-    document.querySelector('input[name="scaleRadio"]:checked').checked = false;
+    document.querySelector('input[name="scaleRadio"]:checked').removeAttribute('checked');
     document.querySelectorAll('input[name="scaleRadio"]').forEach(inp => {
       if (inp.value == 1.2) {
-        inp.checked = "true";
+        inp.checked = "checked";
       }
     });
   }
