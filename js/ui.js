@@ -3,6 +3,7 @@ import * as pdfModule from './pdf.js';
 let checkSearchButtons;
 let checkButtons;
 let updateSidebarPage;
+let updateLocalStorage;
 
 function enableReadingPageUI() {
   let prevPageNum;
@@ -56,7 +57,7 @@ function enableReadingPageUI() {
 
   checkButtons();
 
-  function updateLocalStorage() {
+  updateLocalStorage = function () {
     pdfInfo.position = pdfContainer.scrollTop;
     pdfInfo.zoom = document.querySelector('input[name="scaleRadio"]:checked').value;
     pdfInfo.theme = document.querySelector('.activeTheme').id;
@@ -293,5 +294,4 @@ function enableReadingPageUI() {
     document.querySelector('.temp').replaceWith(...document.querySelector('.temp').childNodes);
 }
 
-export { checkSearchButtons, checkButtons, updateSidebarPage };
-export default enableReadingPageUI;
+export { enableReadingPageUI, checkSearchButtons, checkButtons, updateSidebarPage, updateLocalStorage };

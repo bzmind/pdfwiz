@@ -1,5 +1,5 @@
 import showPdf from './pdf.js';
-import enableReadingPageUI from './ui.js';
+import * as UiModule from './ui.js';
 
 let perfEntries = performance.getEntriesByType("navigation")[0];
 
@@ -56,6 +56,10 @@ document.addEventListener('dragover', (e) => {
 });
 
 function processPdf(e) {
+  // If the user has already selected a file and is in the reading page now
+  if (document.querySelector('.temp') == null)
+    UiModule.updateLocalStorage();
+  
   let file;
 
   if (e.type == 'change')
@@ -81,7 +85,7 @@ function processPdf(e) {
   if (document.querySelector('.homeContainer') != null)
     document.querySelector('.homeContainer').remove();
   showPdf(file);
-  enableReadingPageUI();
+  UiModule.enableReadingPageUI();
   setLastPdf(file);
 }
 
@@ -93,7 +97,7 @@ function getLastPdf() {
   localforage.getItem('lastPdf', (err, value) => {
     if (err || !value) return;
     document.querySelector('.homeContainer').remove();
-    enableReadingPageUI();
+    UiModule.enableReadingPageUI();
     showPdf(value);
   });
 }
