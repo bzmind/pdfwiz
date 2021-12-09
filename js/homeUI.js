@@ -59,7 +59,7 @@ function processPdf(e) {
   // If the user has already selected a file and is in the reading page now
   if (document.querySelector('.temp') == null)
     UiModule.updateLocalStorage();
-  
+
   let file;
 
   if (e.type == 'change')
@@ -83,9 +83,12 @@ function processPdf(e) {
   }
 
   if (document.querySelector('.homeContainer') != null)
+    UiModule.enableReadingPageUI();
+
+  if (document.querySelector('.homeContainer') != null)
     document.querySelector('.homeContainer').remove();
+
   showPdf(file);
-  UiModule.enableReadingPageUI();
   setLastPdf(file);
 }
 

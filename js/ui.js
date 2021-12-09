@@ -89,6 +89,7 @@ function enableReadingPageUI() {
   let scaleMenu = document.querySelector('#scale-menu');
   scaleBtn.addEventListener('click', toggleScaleMenu);
   function toggleScaleMenu() {
+    
     if (scaleBtn.getAttribute('class') == 'clicked') {
       scaleBtn.removeAttribute('class');
       scaleMenu.removeAttribute('class');
