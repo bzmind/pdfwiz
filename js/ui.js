@@ -89,7 +89,7 @@ function enableReadingPageUI() {
   let scaleMenu = document.querySelector('#scale-menu');
   scaleBtn.addEventListener('click', toggleScaleMenu);
   function toggleScaleMenu() {
-    
+
     if (scaleBtn.getAttribute('class') == 'clicked') {
       scaleBtn.removeAttribute('class');
       scaleMenu.removeAttribute('class');
@@ -107,7 +107,7 @@ function enableReadingPageUI() {
   function zoom() {
     let lastPageNum = document.querySelector('#currPage').value;
     updateLocalStorage();
-    
+
     pdfModule.makePageContainers().then(() => {
       let target = document.querySelector(`[data-page="${lastPageNum}"]`);
       target.scrollIntoView({ block: 'center' });
@@ -129,7 +129,10 @@ function enableReadingPageUI() {
       searchBtn.setAttribute('class', 'clicked');
       document.querySelector('.prevSearchResult').disabled = true;
       document.querySelector('.nextSearchResult').disabled = true;
-      setTimeout(() => { document.querySelector('.searchInput').focus(); }, 50);
+      setTimeout(() => 
+      { 
+        document.querySelector('.searchInput').focus(); 
+      }, 50);
     }
   }
 

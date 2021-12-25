@@ -460,7 +460,6 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
 
     pageSpans.forEach(span => {
       let spanContent = span.textContent;
-      console.log(span.innerHTML);
 
       if (spanContent.includes(searchWord)) {
         if (firstHighlightedSpan == undefined) {
