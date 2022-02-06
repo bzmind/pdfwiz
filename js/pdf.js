@@ -256,6 +256,7 @@ function enableObserver() {
             });
           } else {
             renderPage(pageNum);
+            RemoveOldRenderedPages();
           }
         } else if (document.querySelector(`[data-page="${pageNum}"] .textLayer span.srHighlighted`) == null) {
           if (isSearching) {
@@ -273,6 +274,20 @@ function enableObserver() {
   pageContainers.forEach((container) => {
     observer.observe(container);
   });
+}
+
+function RemoveOldRenderedPages() {
+  let oldPages = document.querySelectorAll('[data-visible="true"]');
+
+  if (oldPages.length > 10){
+    let amountOfPageToRemove = 5;
+
+    for(let i = 0; i <= amountOfPageToRemove; i++)
+    {
+      oldPages[i].removeAttribute('data-visible');
+      oldPages[i].innerHTML = '';
+    }
+  }
 }
 
 // Setup sidebar
