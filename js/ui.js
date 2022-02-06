@@ -105,12 +105,13 @@ function enableReadingPageUI() {
     item.addEventListener('change', zoom);
   });
   function zoom() {
-    let lastPageNum = document.querySelector('#currPage').value;
+    let lastPdfHeight = pdfContainer.scrollHeight;
     updateLocalStorage();
 
     pdfModule.makePageContainers().then(() => {
-      let target = document.querySelector(`[data-page="${lastPageNum}"]`);
-      target.scrollIntoView({ block: 'center' });
+      let ratio = pdfContainer.scrollHeight / lastPdfHeight;
+      let newScrollPosition = pdfContainer.scrollTop * ratio;
+      pdfContainer.scrollTop = newScrollPosition;
     });
   }
 
@@ -129,9 +130,8 @@ function enableReadingPageUI() {
       searchBtn.setAttribute('class', 'clicked');
       document.querySelector('.prevSearchResult').disabled = true;
       document.querySelector('.nextSearchResult').disabled = true;
-      setTimeout(() => 
-      { 
-        document.querySelector('.searchInput').focus(); 
+      setTimeout(() => {
+        document.querySelector('.searchInput').focus();
       }, 50);
     }
   }
