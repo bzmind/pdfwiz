@@ -1,4 +1,4 @@
-import * as pdfModule from './pdf.js';
+import * as pdfModule from './PdfProcessor.js';
 
 let checkSearchButtons;
 let checkButtons;
@@ -87,7 +87,9 @@ function enableReadingPageUI() {
   // Scale button & menu
   let scaleBtn = document.querySelector('#scaleBtn');
   let scaleMenu = document.querySelector('#scale-menu');
+
   scaleBtn.addEventListener('click', toggleScaleMenu);
+
   function toggleScaleMenu() {
 
     if (scaleBtn.getAttribute('class') == 'clicked') {
@@ -118,7 +120,9 @@ function enableReadingPageUI() {
   // Search button
   let searchBtn = document.querySelector('#searchBtn');
   let searchMenu = document.querySelector('#searchInputContainer');
+
   searchBtn.addEventListener('click', toggleSearchMenu);
+
   function toggleSearchMenu() {
     if (searchBtn.getAttribute('class') == 'clicked') {
       searchBtn.removeAttribute('class');
@@ -146,8 +150,10 @@ function enableReadingPageUI() {
 
   let prevSearchResult = document.querySelector('.prevSearchResult');
   let nextSearchResult = document.querySelector('.nextSearchResult');
+
   prevSearchResult.addEventListener('click', goToSrSpan);
   nextSearchResult.addEventListener('click', goToSrSpan);
+
   function goToSrSpan(e) {
     pdfModule.scrollToSrSpan(e);
   }
@@ -190,6 +196,7 @@ function enableReadingPageUI() {
   // Toggle Theme
   let themeBtn = document.querySelector('#themeBtn');
   themeBtn.addEventListener('click', toggleTheme);
+
   function toggleTheme() {
     let activeTheme = document.querySelector('.activeTheme');
     let disabledTheme = document.querySelector('.disabledTheme');
@@ -252,6 +259,7 @@ function enableReadingPageUI() {
       e.preventDefault();
     }
   });
+
   window.onkeyup = (e) => {
     if (e.ctrlKey && e.key == 'f' || e.code == 'KeyF') {
       toggleSearchMenu();
@@ -277,15 +285,21 @@ function enableReadingPageUI() {
   }
 
   // Controll page counter input on blur and enter key press
+  pageCounter.addEventListener('focus', (e) => {
+    prevPageNum = e.target.value;
+  });
+
   pageCounter.addEventListener('keyup', (e) => {
     if (e.key === 'Enter' || e.keyCode === 13) {
       if (e.target.value > pdfModule.allPages || e.target.value < 1) {
         e.target.value = (prevPageNum == undefined ? 1 : prevPageNum);
       } else if (e.target.value != prevPageNum) {
         goToPage(e.target.value);
+        prevPageNum = e.target.value;
       }
     }
   });
+
   pageCounter.addEventListener('blur', (e) => {
     if (e.target.value > pdfModule.allPages || e.target.value < 1) {
       e.target.value = (prevPageNum == undefined ? 1 : prevPageNum);

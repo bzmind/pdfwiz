@@ -1,4 +1,4 @@
-import * as UiModule from './ui.js';
+import * as UiModule from './ReadingPageUi.js';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 

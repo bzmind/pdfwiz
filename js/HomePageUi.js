@@ -1,5 +1,5 @@
-import showPdf from './pdf.js';
-import * as UiModule from './ui.js';
+import showPdf from './PdfProcessor.js';
+import * as UiModule from './ReadingPageUi.js';
 
 let perfEntries = performance.getEntriesByType("navigation")[0];
 
