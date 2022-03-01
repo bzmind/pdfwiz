@@ -267,6 +267,8 @@
     font-size: 14px;
     width: 150px;
     transition: all 0.1s ease-out;
+    font-family: "Space Grotesk";
+    font-weight: 600;
 
     &::placeholder {
       color: darken($elText, 10%);
