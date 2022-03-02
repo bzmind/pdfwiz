@@ -256,7 +256,7 @@ function enableObserver() {
             });
           } else {
             renderPage(pageNum);
-            RemoveOldRenderedPages();
+            removeOldRenderedPages();
           }
         } else if (document.querySelector(`[data-page="${pageNum}"] .textLayer span.srHighlighted`) == null) {
           if (isSearching) {
@@ -276,13 +276,13 @@ function enableObserver() {
   });
 }
 
-function RemoveOldRenderedPages() {
+function removeOldRenderedPages() {
   let oldPages = document.querySelectorAll('[data-visible="true"]');
 
-  if (oldPages.length > 10){
+  if (oldPages.length > 10) {
     let amountOfPageToRemove = 5;
 
-    for(let i = 0; i <= amountOfPageToRemove; i++)
+    for (let i = amountOfPageToRemove - 1; i >= 0; i--)
     {
       oldPages[i].removeAttribute('data-visible');
       oldPages[i].innerHTML = '';
