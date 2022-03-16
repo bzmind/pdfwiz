@@ -197,47 +197,60 @@ function renderPage(pageNum) {
   });
 }
 
+// function observePageChange() {
+//   function isVisible(entry) {
+//     entry.forEach((pageContainer) => {
+//       if (pageContainer.isIntersecting) {
+//         let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
+//         updatePageNum(currPage);
+//       }
+//     });
+//   }
+
+//   let pageCounter = document.querySelector('#currPage');
+//   let pageContainers = document.querySelectorAll('.page-container');
+//   let sidebar = document.querySelector('.sidebar');
+//   let root = document.querySelector('body');
+//   let halfRootHeight = 6; // So the complete height of the root will be 12px
+//   let rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
+//   let rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
+
+//   let observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
+//   pageContainers.forEach((container) => {
+//     observer.observe(container);
+//   });
+
+//   new ResizeObserver(() => {
+//     rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
+//     rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
+//     observer.disconnect();
+//     observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
+//     pageContainers.forEach((container) => {
+//       observer.observe(container);
+//     });
+//   }).observe(root);
+
+//   function updatePageNum(currPage) {
+//     pageCounter.value = currPage;
+
+//     if (sidebar.classList.contains('sidebar-on'))
+//       UiModule.updateSidebarPage(currPage);
+
+//     UiModule.checkButtons();
+//   }
+// }
+
+let pdfContainer = document.querySelector('.pdf-container');
+
+pdfContainer.addEventListener('scroll', observePageChange);
+window.addEventListener('resize', observePageChange);
+
+let pageCounter = document.querySelector('#currPage');
+
 function observePageChange() {
-  function isVisible(entry) {
-    entry.forEach((pageContainer) => {
-      if (pageContainer.isIntersecting) {
-        let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
-        updatePageNum(currPage);
-      }
-    });
-  }
-
-  let pageCounter = document.querySelector('#currPage');
-  let pageContainers = document.querySelectorAll('.page-container');
-  let sidebar = document.querySelector('.sidebar');
-  let root = document.querySelector('body');
-  let halfRootHeight = 6; // So the complete height of the root will be 12px
-  let rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
-  let rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
-
-  let observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
-  pageContainers.forEach((container) => {
-    observer.observe(container);
-  });
-
-  new ResizeObserver(() => {
-    rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
-    rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
-    observer.disconnect();
-    observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
-    pageContainers.forEach((container) => {
-      observer.observe(container);
-    });
-  }).observe(root);
-
-  function updatePageNum(currPage) {
-    pageCounter.value = currPage;
-
-    if (sidebar.classList.contains('sidebar-on'))
-      UiModule.updateSidebarPage(currPage);
-
-    UiModule.checkButtons();
-  }
+  'use strict';
+  var height = pdfContainer.scrollHeight - window.innerHeight;
+  pageCounter.value = Math.round(pdfContainer.scrollTop / height * (allPages - 1) + 1);
 }
 
 // Enable Intersection Observer to lazy load pages
@@ -279,11 +292,10 @@ function enableObserver() {
 function removeOldRenderedPages() {
   let oldPages = document.querySelectorAll('[data-visible="true"]');
 
-  if (oldPages.length > 10) {
-    let amountOfPageToRemove = 5;
+  if (oldPages.length >= 20) {
+    let amountOfPageToRemove = 15;
 
-    for (let i = amountOfPageToRemove - 1; i >= 0; i--)
-    {
+    for (let i = amountOfPageToRemove - 1; i >= 0; i--) {
       oldPages[i].removeAttribute('data-visible');
       oldPages[i].innerHTML = '';
     }
