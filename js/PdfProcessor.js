@@ -243,7 +243,6 @@ function renderPage(pageNum) {
 let pdfContainer = document.querySelector('.pdf-container');
 
 pdfContainer.addEventListener('scroll', observePageChange);
-window.addEventListener('resize', observePageChange);
 
 let pageCounter = document.querySelector('#currPage');
 
@@ -251,6 +250,7 @@ function observePageChange() {
   'use strict';
   var height = pdfContainer.scrollHeight - window.innerHeight;
   pageCounter.value = Math.round(pdfContainer.scrollTop / height * (allPages - 1) + 1);
+  UiModule.checkButtons();
 }
 
 // Enable Intersection Observer to lazy load pages
