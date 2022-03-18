@@ -10,6 +10,7 @@ let srPageAndText = [];
 let srSpans = [];
 let isSearching;
 let pdfHash;
+let oldPages = [];
 
 const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
@@ -192,6 +193,8 @@ function renderPage(pageNum) {
         internalLinks.forEach(item => {
           setupInternalLink(item);
         });
+        oldPages.push(pageNum);
+        removeOldRenderedPages();
       });
     });
   });
@@ -269,7 +272,6 @@ function enableObserver() {
             });
           } else {
             renderPage(pageNum);
-            removeOldRenderedPages();
           }
         } else if (document.querySelector(`[data-page="${pageNum}"] .textLayer span.srHighlighted`) == null) {
           if (isSearching) {
@@ -290,17 +292,22 @@ function enableObserver() {
 }
 
 function removeOldRenderedPages() {
-  let oldPages = document.querySelectorAll('[data-visible="true"]');
+  let s = "";
+  
+  oldPages.forEach(element => {
+    s += `${element}, `;
+  });
 
-  if (oldPages.length >= 20) {
-    let amountOfPageToRemove = 15;
-
-    for (let i = amountOfPageToRemove - 1; i >= 0; i--) {
-      oldPages[i].removeAttribute('data-visible');
-      oldPages[i].innerHTML = '';
-    }
+  console.log(s + 'to delete: ' + oldPages[0]);
+  
+  if (oldPages.length > 10) {
+    let page = document.querySelector(`[data-page="${oldPages[0]}"]`);
+    page.removeAttribute('data-visible');
+    page.innerHTML = '';
+    oldPages.shift();
   }
 }
+
 
 // Setup sidebar
 function makeSidebar() {
