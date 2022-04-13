@@ -298,8 +298,6 @@ function removeOldRenderedPages() {
     s += `${element}, `;
   });
 
-  console.log(s + 'to delete: ' + oldPages[0]);
-  
   if (oldPages.length > 10) {
     let page = document.querySelector(`[data-page="${oldPages[0]}"]`);
     page.removeAttribute('data-visible');
@@ -576,11 +574,12 @@ function scrollToSrSpan(e) {
     currentSr = null;
     scrollToSrPage(e);
   } else {
-    currentSr = null;
+    //currentSr = null;
     let spanToScroll = document.querySelector(`[data-searchindex="${spanIndex}"]`);
     currentSr = spanToScroll;
     spanToScroll.scrollIntoView({ block: 'center' });
   }
+  console.log(document.querySelector(`[data-searchindex="${spanIndex}"]`).getAttribute('data-searchindex'));
 
   UiModule.checkSearchButtons();
 }
