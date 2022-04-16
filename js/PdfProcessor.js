@@ -574,12 +574,11 @@ function scrollToSrSpan(e) {
     currentSr = null;
     scrollToSrPage(e);
   } else {
-    //currentSr = null;
+    currentSr = null;
     let spanToScroll = document.querySelector(`[data-searchindex="${spanIndex}"]`);
     currentSr = spanToScroll;
     spanToScroll.scrollIntoView({ block: 'center' });
   }
-  console.log(document.querySelector(`[data-searchindex="${spanIndex}"]`).getAttribute('data-searchindex'));
 
   UiModule.checkSearchButtons();
 }
