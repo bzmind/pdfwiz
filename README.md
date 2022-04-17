@@ -1,4 +1,4 @@
-# PDFWIZ 🧙‍♂️
+<h1>PDFWIZ 🧙‍♂️<h1>
 <h2>the best online pdf reader in the world</h2>
 
 This is the first project that I made while learning JavaScript.</br>
