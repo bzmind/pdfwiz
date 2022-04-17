@@ -1,8 +1,7 @@
 # PDFWIZ 🧙‍♂️
 <h2>the best online pdf reader in the world</h2>
 
-This is the first project that I made while learning JavaScript.
-
+This is the first project that I made while learning JavaScript.</br>
 So, it has TONS of bugs. The code is written in the most noobish way</br>
 that exists in this universe, and it really got to a point where I couldn't</br>
 fix its bugs or develop it anymore 😂</br>
