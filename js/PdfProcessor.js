@@ -16,13 +16,16 @@ const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
 
 // Get document
-function showPdf(file) {
+function showPdf(file)
+{
   let fileReader = new FileReader();
 
-  fileReader.onload = function () {
+  fileReader.onload = function ()
+  {
     let typedArray = new Uint8Array(this.result);
 
-    pdfjsLib.getDocument(typedArray).promise.then(function (_pdfDoc) {
+    pdfjsLib.getDocument(typedArray).promise.then(function (_pdfDoc)
+    {
       pdfDoc = _pdfDoc;
       allPages = pdfDoc.numPages;
       pdfHash = pdfDoc.fingerprints[0];
@@ -37,26 +40,32 @@ function showPdf(file) {
   fileReader.readAsArrayBuffer(file);
 }
 
-function setupInternalLink(internalLink) {
+function setupInternalLink(internalLink)
+{
   internalLink.addEventListener('click', goToInternalLinkPage);
 }
 
-function goToInternalLinkPage(e) {
+function goToInternalLinkPage(e)
+{
   let pageNum = getPageNumFromDestHash(e.target.hash);
   let pageToScroll = document.querySelector(`[data-page="${pageNum}"]`);
   pageToScroll.scrollIntoView({ block: 'start' });
 }
 
-function getPageNumFromDestHash(destHash) {
+function getPageNumFromDestHash(destHash)
+{
   const pattern = /[^{\}]+(?=})/g;
   let jsonDest = JSON.parse(`{${unescape(destHash).match(pattern)[0]}}`);
   let pageNum = pagesRefs[`${jsonDest.num}R`];
   return pageNum;
 }
 
-function setupPageRefs() {
-  for (let pageNum = 1; pageNum <= allPages; pageNum++) {
-    pdfDoc.getPage(pageNum).then(page => {
+function setupPageRefs()
+{
+  for (let pageNum = 1; pageNum <= allPages; pageNum++)
+  {
+    pdfDoc.getPage(pageNum).then(page =>
+    {
       const refStr = page.ref.gen === 0 ? `${page.ref.num}R` : `${page.ref.num}R${page.ref.gen}`;
       pagesRefs[refStr] = pageNum;
     });
@@ -64,14 +73,17 @@ function setupPageRefs() {
 }
 
 // Prepare the page containers
-function makePageContainers() {
+function makePageContainers()
+{
   document.querySelector('.pdf-container').innerHTML = "";
 
-  let promise = pdfDoc.getPage(Math.floor(allPages / 2)).then(page => {
+  let promise = pdfDoc.getPage(Math.floor(allPages / 2)).then(page =>
+  {
     let scale = parseFloat(document.querySelector('input[name="scaleRadio"]:checked').value);
     let viewport = page.getViewport({ scale });
 
-    for (let i = 1; i <= allPages; i++) {
+    for (let i = 1; i <= allPages; i++)
+    {
       let pageContainer = document.createElement('div');
       pageContainer.setAttribute('class', 'page-container');
       pageContainer.setAttribute('data-page', i);
@@ -88,16 +100,19 @@ function makePageContainers() {
     }
   });
 
-  return promise.then(() => {
+  return promise.then(() =>
+  {
     enableObserver();
     observePageChange();
     getPdfLastData(pdfDoc.fingerprints[0]);
   });
 }
 
-function getPdfLastData(pdfHash) {
+function getPdfLastData(pdfHash)
+{
   let d = localStorage.getItem(pdfHash);
-  if (d != null) {
+  if (d != null)
+  {
     // Get pdf's last position
     let lastPos = parseInt(JSON.parse(localStorage.getItem(pdfHash)).position);
     document.querySelector('.pdf-container').scrollTop = lastPos;
@@ -105,8 +120,10 @@ function getPdfLastData(pdfHash) {
     // Get pdf's last scale
     let zoom = parseFloat(JSON.parse(localStorage.getItem(pdfHash)).zoom);
     document.querySelector('input[name="scaleRadio"]:checked').removeAttribute('checked');
-    document.querySelectorAll('input[name="scaleRadio"]').forEach(inp => {
-      if (inp.value == zoom) {
+    document.querySelectorAll('input[name="scaleRadio"]').forEach(inp =>
+    {
+      if (inp.value == zoom)
+      {
         inp.checked = "checked";
       }
     });
@@ -115,10 +132,13 @@ function getPdfLastData(pdfHash) {
     document.querySelector('.activeTheme').setAttribute('class', 'disabledTheme');
     let theme = JSON.parse(localStorage.getItem(pdfHash)).theme;
     document.getElementById(theme).setAttribute('class', 'activeTheme');
-  } else {
+  } else
+  {
     document.querySelector('input[name="scaleRadio"]:checked').removeAttribute('checked');
-    document.querySelectorAll('input[name="scaleRadio"]').forEach(inp => {
-      if (inp.value == 1.2) {
+    document.querySelectorAll('input[name="scaleRadio"]').forEach(inp =>
+    {
+      if (inp.value == 1.2)
+      {
         inp.checked = "checked";
       }
     });
@@ -126,11 +146,13 @@ function getPdfLastData(pdfHash) {
 }
 
 // Render page
-function renderPage(pageNum) {
+function renderPage(pageNum)
+{
   if (document.querySelector(`[data-page="${pageNum}"] > #pdfLayer`) != null)
     return;
 
-  return pdfDoc.getPage(pageNum).then(page => {
+  return pdfDoc.getPage(pageNum).then(page =>
+  {
     let scale = parseFloat(document.querySelector('input[name="scaleRadio"]:checked').value);
 
     let canvas = document.createElement('canvas');
@@ -156,7 +178,8 @@ function renderPage(pageNum) {
     pageContainer.appendChild(canvas);
     pageContainer.setAttribute('data-visible', 'true');
 
-    return page.getTextContent().then(textContent => {
+    return page.getTextContent().then(textContent =>
+    {
       let textLayer = document.createElement('div');
       textLayer.classList.add('textLayer');
       textLayer.style.left = `${canvas.offsetLeft}px`;
@@ -173,7 +196,8 @@ function renderPage(pageNum) {
 
       document.querySelector(`[data-page="${pageNum}"]`).appendChild(textLayer);
 
-      return page.getAnnotations().then((annotationData) => {
+      return page.getAnnotations().then((annotationData) =>
+      {
         // We add annotations to the same layer as text layer, so that
         // our links are actuall links and the texts are also selectable
         // otherwise it was causing the texts to be unselectable
@@ -190,7 +214,8 @@ function renderPage(pageNum) {
         });
 
         let internalLinks = document.querySelectorAll(`[data-page="${pageNum}"] .textLayer a.internalLink`);
-        internalLinks.forEach(item => {
+        internalLinks.forEach(item =>
+        {
           setupInternalLink(item);
         });
         oldPages.push(pageNum);
@@ -200,81 +225,49 @@ function renderPage(pageNum) {
   });
 }
 
-// function observePageChange() {
-//   function isVisible(entry) {
-//     entry.forEach((pageContainer) => {
-//       if (pageContainer.isIntersecting) {
-//         let currPage = parseInt(pageContainer.target.getAttribute('data-page'));
-//         updatePageNum(currPage);
-//       }
-//     });
-//   }
-
-//   let pageCounter = document.querySelector('#currPage');
-//   let pageContainers = document.querySelectorAll('.page-container');
-//   let sidebar = document.querySelector('.sidebar');
-//   let root = document.querySelector('body');
-//   let halfRootHeight = 6; // So the complete height of the root will be 12px
-//   let rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
-//   let rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
-
-//   let observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
-//   pageContainers.forEach((container) => {
-//     observer.observe(container);
-//   });
-
-//   new ResizeObserver(() => {
-//     rootVerticalMargin = Math.round(root.offsetHeight / 2) - halfRootHeight;
-//     rootMargin = `-${rootVerticalMargin}px 0px -${rootVerticalMargin}px 0px`;
-//     observer.disconnect();
-//     observer = new IntersectionObserver(isVisible, { root, rootMargin, threshold: 0 });
-//     pageContainers.forEach((container) => {
-//       observer.observe(container);
-//     });
-//   }).observe(root);
-
-//   function updatePageNum(currPage) {
-//     pageCounter.value = currPage;
-
-//     if (sidebar.classList.contains('sidebar-on'))
-//       UiModule.updateSidebarPage(currPage);
-
-//     UiModule.checkButtons();
-//   }
-// }
-
 let pdfContainer = document.querySelector('.pdf-container');
 
 pdfContainer.addEventListener('scroll', observePageChange);
 
 let pageCounter = document.querySelector('#currPage');
 
-function observePageChange() {
-  'use strict';
+function observePageChange()
+{
+  //'use strict';
   var height = pdfContainer.scrollHeight - window.innerHeight;
   pageCounter.value = Math.round(pdfContainer.scrollTop / height * (allPages - 1) + 1);
   UiModule.checkButtons();
 }
 
 // Enable Intersection Observer to lazy load pages
-function enableObserver() {
-  function isVisible(entry) {
-    entry.forEach((container) => {
-      if (container.isIntersecting) {
+function enableObserver()
+{
+  function isVisible(entry)
+  {
+    entry.forEach((container) =>
+    {
+      if (container.isIntersecting)
+      {
         let pageNum = parseInt(container.target.getAttribute('data-page'));
-        if (!container.target.hasAttribute('data-visible')) {
+        if (!container.target.hasAttribute('data-visible'))
+        {
           container.target.setAttribute('data-visible', 'true');
-          if (isSearching) {
-            renderPage(pageNum).then(() => {
+          if (isSearching)
+          {
+            renderPage(pageNum).then(() =>
+            {
               let searchWordsArr = srPageAndText[`${pageNum}R`];
               if (searchWordsArr != null)
                 highlightSearchText(pageNum, searchWordsArr, false);
             });
-          } else {
+          } else
+          {
             renderPage(pageNum);
           }
-        } else if (document.querySelector(`[data-page="${pageNum}"] .textLayer span.srHighlighted`) == null) {
-          if (isSearching) {
+        } else if (document.querySelector(`[data-page="${pageNum}"] .textLayer span.srHighlighted`) == null)
+        {
+          if (isSearching)
+          {
             let searchWordsArr = srPageAndText[`${pageNum}R`];
             if (searchWordsArr != null)
               highlightSearchText(pageNum, searchWordsArr, false);
@@ -286,19 +279,23 @@ function enableObserver() {
 
   let observer = new IntersectionObserver(isVisible, { threshold: 0 });
   let pageContainers = document.querySelectorAll('.page-container');
-  pageContainers.forEach((container) => {
+  pageContainers.forEach((container) =>
+  {
     observer.observe(container);
   });
 }
 
-function removeOldRenderedPages() {
+function removeOldRenderedPages()
+{
   let s = "";
-  
-  oldPages.forEach(element => {
+
+  oldPages.forEach(element =>
+  {
     s += `${element}, `;
   });
 
-  if (oldPages.length > 10) {
+  if (oldPages.length > 10)
+  {
     let page = document.querySelector(`[data-page="${oldPages[0]}"]`);
     page.removeAttribute('data-visible');
     page.innerHTML = '';
@@ -308,12 +305,15 @@ function removeOldRenderedPages() {
 
 
 // Setup sidebar
-function makeSidebar() {
-  let promise = pdfDoc.getPage(Math.floor(allPages / 2)).then(page => {
+function makeSidebar()
+{
+  let promise = pdfDoc.getPage(Math.floor(allPages / 2)).then(page =>
+  {
 
     let viewport = page.getViewport({ scale: sidebarScale });
 
-    for (let i = 1; i <= allPages; i++) {
+    for (let i = 1; i <= allPages; i++)
+    {
       let pageImageContainer = document.createElement('div');
       pageImageContainer.setAttribute('class', 'page-image-container');
       pageImageContainer.setAttribute('data-page-image', i);
@@ -328,15 +328,20 @@ function makeSidebar() {
       document.querySelector('.sidebar').appendChild(pageImageContainer);
     }
   })
-  return promise.then(() => {
+  return promise.then(() =>
+  {
     enableSidebarObserver();
   });
 }
 
-function enableSidebarObserver() {
-  function isVisible(entry) {
-    entry.forEach((imgContainer) => {
-      if (imgContainer.isIntersecting && !imgContainer.target.hasAttribute('data-visible')) {
+function enableSidebarObserver()
+{
+  function isVisible(entry)
+  {
+    entry.forEach((imgContainer) =>
+    {
+      if (imgContainer.isIntersecting && !imgContainer.target.hasAttribute('data-visible'))
+      {
         imgContainer.target.setAttribute('data-visible', 'true');
         let pageImageNum = parseInt(imgContainer.target.getAttribute('data-page-image'));
         renderPageImage(pageImageNum);
@@ -347,13 +352,16 @@ function enableSidebarObserver() {
   let observer = new IntersectionObserver(isVisible, { root: document.querySelector('.sidebar'), threshold: 0 });
   let pageImageContainers = document.querySelectorAll('.page-image-container');
 
-  pageImageContainers.forEach((imgContainer) => {
+  pageImageContainers.forEach((imgContainer) =>
+  {
     observer.observe(imgContainer);
   });
 }
 
-function renderPageImage(pageImageNum) {
-  pdfDoc.getPage(pageImageNum).then(page => {
+function renderPageImage(pageImageNum)
+{
+  pdfDoc.getPage(pageImageNum).then(page =>
+  {
 
     let canvas = document.createElement('canvas');
     canvas.style.display = "block";
@@ -368,7 +376,8 @@ function renderPageImage(pageImageNum) {
     page.render({
       canvasContext: ctx,
       viewport
-    }).promise.then(() => {
+    }).promise.then(() =>
+    {
 
       let aTag = document.createElement('a');
       aTag.href = `#page${pageImageNum}`;
@@ -378,7 +387,8 @@ function renderPageImage(pageImageNum) {
       img.id = 'pdfPageImage';
 
       let theme = document.querySelector('.activeTheme').id;
-      if (theme == 'dark') {
+      if (theme == 'dark')
+      {
         img.setAttribute('class', 'darkImage');
       }
 
@@ -394,25 +404,31 @@ function renderPageImage(pageImageNum) {
   });
 }
 
-function regexEscape(str) {
+function regexEscape(str)
+{
   return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 }
 
 let currentSr;
 
-function searchAllPages(searchText) {
+function searchAllPages(searchText)
+{
   clearPreviousSearchData();
   UiModule.checkSearchButtons();
   let promises = [];
   isSearching = true;
 
-  for (let i = 1; i <= allPages; i++) {
+  for (let i = 1; i <= allPages; i++)
+  {
     promises.push(getPageLinesPairs(searchText, i));
   }
 
-  Promise.all(promises).then(results => {
-    for (let i = 0; i < results.length; i++) {
-      if (results[i].lines.length > 0) {
+  Promise.all(promises).then(results =>
+  {
+    for (let i = 0; i < results.length; i++)
+    {
+      if (results[i].lines.length > 0)
+      {
         srPageAndText[results[i].page + 'R'] = results[i].lines;
       }
     }
@@ -426,22 +442,27 @@ function searchAllPages(searchText) {
   });
 }
 
-function getPageLinesPairs(searchText, pageNum) {
-  return pdfDoc.getPage(pageNum).then(page => {
+function getPageLinesPairs(searchText, pageNum)
+{
+  return pdfDoc.getPage(pageNum).then(page =>
+  {
     return page.getTextContent();
-  }).then(textContent => {
+  }).then(textContent =>
+  {
     // Search combined text content using regular expression
     let text = textContent.items.map(function (i) { return i.str; }).join(' ');
     let re = new RegExp(regexEscape(searchText), "gi");
     let m;
     let lines = [];
 
-    while (m = re.exec(text)) {
+    while (m = re.exec(text))
+    {
       let line = m[0];
       lines.push(line);
     }
 
-    lines = lines.filter((value, index, self) => {
+    lines = lines.filter((value, index, self) =>
+    {
       return self.indexOf(value) === index;
     });
 
@@ -449,7 +470,8 @@ function getPageLinesPairs(searchText, pageNum) {
   });
 }
 
-function goToSearchResultPage(pageNum) {
+function goToSearchResultPage(pageNum)
+{
   let pageTextLayer = document.querySelector(`[data-page="${pageNum}"] .textLayer`);
 
   // We check if a highlighted span already exists, which means that the user
@@ -458,19 +480,24 @@ function goToSearchResultPage(pageNum) {
   // repeat the rendering and highlighting process again
   let highlightedSpan = document.querySelectorAll(`[data-page="${pageNum}"] .textLayer span.srHighlighted`);
 
-  if (highlightedSpan.length > 0) {
+  if (highlightedSpan.length > 0)
+  {
     let page = document.querySelector(`[data-page="${pageNum}"]`);
     page.setAttribute('data-searched', 'true');
     UiModule.checkSearchButtons();
     highlightedSpan[0].scrollIntoView({ block: 'center' });
-  } else {
-    if (pageTextLayer == undefined) {
-      renderPage(pageNum).then(() => {
+  } else
+  {
+    if (pageTextLayer == undefined)
+    {
+      renderPage(pageNum).then(() =>
+      {
         let searchWordsArr = srPageAndText[`${pageNum}R`];
         if (searchWordsArr != null)
           highlightSearchText(pageNum, searchWordsArr, true);
       });
-    } else {
+    } else
+    {
       let searchWordsArr = srPageAndText[`${pageNum}R`];
       if (searchWordsArr != null)
         highlightSearchText(pageNum, searchWordsArr, true);
@@ -478,7 +505,8 @@ function goToSearchResultPage(pageNum) {
   }
 }
 
-function highlightSearchText(pageNum, searchWordsArr, scroll) {
+function highlightSearchText(pageNum, searchWordsArr, scroll)
+{
   if (document.querySelector('[data-searched="true"]') != null)
     document.querySelector('[data-searched="true"]').removeAttribute('data-searched');
 
@@ -487,22 +515,28 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
   let firstHighlightedSpan;
   let pageSpans = document.querySelectorAll(`[data-page="${pageNum}"] .textLayer span`);
 
-  searchWordsArr.forEach((searchWord) => {
+  searchWordsArr.forEach((searchWord) =>
+  {
     let re = new RegExp(`${regexEscape(searchWord)}`, 'g');
 
-    pageSpans.forEach(span => {
+    pageSpans.forEach(span =>
+    {
       let spanContent = span.textContent;
 
-      if (spanContent.includes(searchWord)) {
-        if (firstHighlightedSpan == undefined) {
+      if (spanContent.includes(searchWord))
+      {
+        if (firstHighlightedSpan == undefined)
+        {
           firstHighlightedSpan = span;
         }
-        if (span.innerHTML.includes('srHighlighted')) {
+        if (span.innerHTML.includes('srHighlighted'))
+        {
           // This regex is only for grabbing the text outside of the span tag, so we can
           // highlight both the big "D" and the small "d" together
           let re = new RegExp(`(${regexEscape(searchWord)})(?![^<]*>|[^<>]*</)`, 'g');
           span.innerHTML = span.innerHTML.replace(re, `<span class="srHighlighted">${searchWord}</span>`);
-        } else {
+        } else
+        {
           span.innerHTML = span.innerHTML.replace(re, `<span class="srHighlighted">${searchWord}</span>`);
         }
       }
@@ -511,15 +545,18 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
 
   let searchIndex = srSpans.length;
 
-  pageSpans.forEach(span => {
+  pageSpans.forEach(span =>
+  {
     let spanContent = span.textContent;
     // Just to fill the srSpans in order of the actuall spans in the page
     // that's why I made this case insensitive regex, otherwise the above re,
     // would first push all the spans which have big 'D' for example, and then
     // it would push all the spans which had small 'd'
     let insensitiveRe = new RegExp(regexEscape(searchWordsArr[0]), 'gi');
-    if (insensitiveRe.test(spanContent)) {
-      if (span.className != 'srHighlighted' && !srSpans.includes(span)) {
+    if (insensitiveRe.test(spanContent))
+    {
+      if (span.className != 'srHighlighted' && !srSpans.includes(span))
+      {
         span.setAttribute('data-searchindex', searchIndex);
         srSpans.push(span);
         searchIndex++;
@@ -527,7 +564,8 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
     }
   });
 
-  if (scroll) {
+  if (scroll)
+  {
     currentSr = firstHighlightedSpan;
     firstHighlightedSpan.scrollIntoView({ block: 'center' });
   }
@@ -535,17 +573,21 @@ function highlightSearchText(pageNum, searchWordsArr, scroll) {
   UiModule.checkSearchButtons();
 }
 
-function scrollToSrPage(e) {
+function scrollToSrPage(e)
+{
   let searchedPageNum = parseInt(document.querySelector('[data-searched="true"]').getAttribute('data-page'));
   let keys = Object.keys(srPageAndText);
   let pageIndex;
 
   if (e.target.classList.contains('prevSearchResult'))
     pageIndex = keys.indexOf(`${searchedPageNum}R`) - 1;
-  else if (e.target.classList.contains('nextSearchResult')) {
-    if (keys.indexOf(`${searchedPageNum}R`) == -1) {
+  else if (e.target.classList.contains('nextSearchResult'))
+  {
+    if (keys.indexOf(`${searchedPageNum}R`) == -1)
+    {
       pageIndex = 1;
-    } else {
+    } else
+    {
       pageIndex = keys.indexOf(`${searchedPageNum}R`) + 1;
     }
   }
@@ -561,7 +603,8 @@ function scrollToSrPage(e) {
   UiModule.checkSearchButtons();
 }
 
-function scrollToSrSpan(e) {
+function scrollToSrSpan(e)
+{
   let searchedSpan = parseInt(currentSr.getAttribute('data-searchindex'));
   let spanIndex;
 
@@ -570,10 +613,12 @@ function scrollToSrSpan(e) {
   else if (e.target.classList.contains('nextSearchResult'))
     spanIndex = searchedSpan + 1;
 
-  if (spanIndex < 0 || spanIndex == srSpans.length) {
+  if (spanIndex < 0 || spanIndex == srSpans.length)
+  {
     currentSr = null;
     scrollToSrPage(e);
-  } else {
+  } else
+  {
     currentSr = null;
     let spanToScroll = document.querySelector(`[data-searchindex="${spanIndex}"]`);
     currentSr = spanToScroll;
@@ -583,13 +628,15 @@ function scrollToSrSpan(e) {
   UiModule.checkSearchButtons();
 }
 
-function clearPreviousSearchData() {
+function clearPreviousSearchData()
+{
   // If user was searching something else before this, and then it searched for sth else
   // then we need to clear any of the informations from the previous searched text
   // like currentsr, data-searchindex, and the page data-searched attribute
   currentSr = null;
   isSearching = false;
-  for (let i = 0; i < srSpans.length; i++) {
+  for (let i = 0; i < srSpans.length; i++)
+  {
     document.querySelector(`[data-searchindex="${i}"]`).removeAttribute('data-searchindex');
   }
 
@@ -610,7 +657,8 @@ function clearPreviousSearchData() {
   let highlights = document.querySelectorAll('.srHighlighted');
   let prevHighlight;
 
-  highlights.forEach((highlight) => {
+  highlights.forEach((highlight) =>
+  {
     if (prevHighlight != null && prevHighlight.parentElement == highlight.parentElement)
       return;
 
@@ -619,7 +667,8 @@ function clearPreviousSearchData() {
   });
 }
 
-export {
+export
+{
   allPages, makePageContainers, makeSidebar, searchAllPages, currentSr, srSpans,
   srPageAndText, clearPreviousSearchData, goToSearchResultPage, scrollToSrSpan, pdfHash
 };
