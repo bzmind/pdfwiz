@@ -234,8 +234,9 @@ let pageCounter = document.querySelector('#currPage');
 function observePageChange()
 {
   //'use strict';
-  var height = pdfContainer.scrollHeight - window.innerHeight;
-  pageCounter.value = Math.round(pdfContainer.scrollTop / height * (allPages - 1) + 1);
+  var height = pdfContainer.scrollHeight;
+  pageCounter.value = Math.round(pdfContainer.scrollTop / height * (allPages) + 1);
+  console.log(pdfContainer.scrollTop / height * (allPages) + 1);
   UiModule.checkButtons();
 }
 

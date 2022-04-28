@@ -355,7 +355,7 @@
 .parent-container .pdf-container .page-container {
   overflow: hidden;
   position: relative;
-  border-radius: 20px;
+  border-radius: 10px;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
@@ -369,7 +369,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 5px;
   overflow: hidden;
 }
 .parent-container .page-image-container:focus {
