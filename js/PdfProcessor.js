@@ -234,9 +234,10 @@ let pageCounter = document.querySelector('#currPage');
 function observePageChange()
 {
   //'use strict';
-  var height = pdfContainer.scrollHeight;
-  pageCounter.value = Math.round(pdfContainer.scrollTop / height * (allPages) + 1);
-  console.log(pdfContainer.scrollTop / height * (allPages) + 1);
+  let height = pdfContainer.scrollHeight;
+  let currPage = ((pdfContainer.scrollTop / 2) / height * (allPages) + 1);
+  pageCounter.value = Math.round(currPage);
+  //console.log(currPage);
   UiModule.checkButtons();
 }
 
