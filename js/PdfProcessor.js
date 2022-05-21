@@ -235,7 +235,7 @@ function observePageChange()
 {
   //'use strict';
   let height = pdfContainer.scrollHeight;
-  let currPage = ((pdfContainer.scrollTop / 2) / height * (allPages) + 1);
+  let currPage = (pdfContainer.scrollTop / height * (allPages) + 1);
   pageCounter.value = Math.round(currPage);
   //console.log(currPage);
   UiModule.checkButtons();
