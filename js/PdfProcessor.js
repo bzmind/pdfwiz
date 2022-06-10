@@ -10,7 +10,7 @@ let srPageAndText = [];
 let srSpans = [];
 let isSearching;
 let pdfHash;
-let oldPages = [];
+let oldPagesNums = [];
 
 const eventBus = new pdfjsViewer.EventBus();
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
@@ -218,7 +218,7 @@ function renderPage(pageNum)
         {
           setupInternalLink(item);
         });
-        oldPages.push(pageNum);
+        oldPagesNums.push(pageNum);
         removeOldRenderedPages();
       });
     });
@@ -289,22 +289,29 @@ function enableObserver()
 
 function removeOldRenderedPages()
 {
-  let s = "";
-
-  oldPages.forEach(element =>
+  if (oldPagesNums.length > 10)
   {
-    s += `${element}, `;
-  });
+    let latestRenderedPageNum = oldPagesNums.at(-1);
+    let biggestDiff = 0;
+    let farestPageToDelete;
 
-  if (oldPages.length > 10)
-  {
-    let page = document.querySelector(`[data-page="${oldPages[0]}"]`);
-    page.removeAttribute('data-visible');
-    page.innerHTML = '';
-    oldPages.shift();
+    oldPagesNums.forEach(oldPageNum =>
+    {
+      let diff = Math.abs(latestRenderedPageNum - oldPageNum);
+      if (diff > biggestDiff)
+      {
+        biggestDiff = diff;
+        farestPageToDelete = document.querySelector(`[data-page="${oldPageNum}"]`);
+      }
+    });
+
+    farestPageToDelete.removeAttribute('data-visible');
+    farestPageToDelete.innerHTML = '';
+    console.log(parseInt(farestPageToDelete.getAttribute('data-page')));
+    let index = oldPagesNums.indexOf(parseInt(farestPageToDelete.getAttribute('data-page')));
+    oldPagesNums.splice(index, 1);
   }
 }
-
 
 // Setup sidebar
 function makeSidebar()
@@ -639,7 +646,9 @@ function clearPreviousSearchData()
   isSearching = false;
   for (let i = 0; i < srSpans.length; i++)
   {
-    document.querySelector(`[data-searchindex="${i}"]`).removeAttribute('data-searchindex');
+    let span = document.querySelector(`[data-searchindex="${i}"]`);
+    if (span != null)
+      span.removeAttribute('data-searchindex');
   }
 
   if (document.querySelector('[data-searched="true"]') != null)
