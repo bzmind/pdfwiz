@@ -237,7 +237,6 @@ function observePageChange()
   let height = pdfContainer.scrollHeight;
   let currPage = (pdfContainer.scrollTop / height * (allPages) + 1);
   pageCounter.value = Math.round(currPage);
-  //console.log(currPage);
   UiModule.checkButtons();
 }
 
@@ -307,7 +306,6 @@ function removeOldRenderedPages()
 
     farestPageToDelete.removeAttribute('data-visible');
     farestPageToDelete.innerHTML = '';
-    console.log(parseInt(farestPageToDelete.getAttribute('data-page')));
     let index = oldPagesNums.indexOf(parseInt(farestPageToDelete.getAttribute('data-page')));
     oldPagesNums.splice(index, 1);
   }
