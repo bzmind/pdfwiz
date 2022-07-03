@@ -315,35 +315,6 @@
     position: relative;
     transition: all 0.1s ease-out;
     padding-right: 24px;
-
-    &::-webkit-scrollbar {
-      width: 14px;
-      background: $bg;
-      border-left: 1px solid $elBg;
-      border-right: 1px solid $elBg;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: $outline;
-      border-left: 4px solid $bg;
-      border-right: 4px solid $bg;
-      border-radius: 5px;
-
-      &:hover {
-        background: $elText;
-      }
-
-      &:horizontal {
-        border-top: 4px solid $bg;
-        border-bottom: 4px solid $bg;
-        border-radius: 10px;
-        background: $outline;
-
-        &:hover {
-          background: $elText;
-        }
-      }
-    }
   }
 
   .sidebar-off {
@@ -369,37 +340,6 @@
     overflow-y: overlay;
     flex-grow: 1;
     max-height: 100vh;
-
-    &::-webkit-scrollbar {
-      width: 14px;
-      background: $bg;
-
-      &:horizontal {
-        height: 15px;
-      }
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: $outline;
-      border-left: 4px solid $bg;
-      border-right: 4px solid $bg;
-      border-radius: 5px;
-
-      &:hover {
-        background: $elText;
-      }
-
-      &:horizontal {
-        border-top: 4px solid $bg;
-        border-bottom: 4px solid $bg;
-        border-radius: 10px;
-        background: $outline;
-
-        &:hover {
-          background: $elText;
-        }
-      }
-    }
 
     .page-container {
       overflow: hidden;

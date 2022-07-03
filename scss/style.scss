@@ -12,8 +12,8 @@
   margin: 0px;
 }
 
-::-webkit-scrollbar-corner {
-  background: $bg;
+:root {
+  color-scheme: dark;
 }
 
 input::-webkit-outer-spin-button,
